@@ -17,7 +17,6 @@ import static org.lwjgl.util.glu.GLU.gluPerspective;
 
 public class TestWalker {
 
-double rotated = 0;
 
     public TestWalker()  {
         try {
@@ -38,21 +37,24 @@ double rotated = 0;
         while (!Display.isCloseRequested()) {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-            boolean forward = Keyboard.isKeyDown(Keyboard.KEY_UP);
-            boolean back = Keyboard.isKeyDown(Keyboard.KEY_DOWN);
+            boolean forward = Keyboard.isKeyDown(Keyboard.KEY_W);
+            boolean back = Keyboard.isKeyDown(Keyboard.KEY_S);
+            boolean up = Keyboard.isKeyDown(Keyboard.KEY_UP);
+            boolean down = Keyboard.isKeyDown(Keyboard.KEY_DOWN);
             boolean right = Keyboard.isKeyDown(Keyboard.KEY_RIGHT);
             boolean left = Keyboard.isKeyDown(Keyboard.KEY_LEFT);
-            float maxV = .25f;
-            if (forward && l.getVy()>-maxV) l.setVy(l.getVy() - .03f);
-            if (back && l.getVy()<maxV) l.setVy(l.getVy() + .03f);
-            if (left && l.getVx()>-maxV) {
+            if (forward) l.setVy(l.getVy() + .1f);
+            if (back) l.setVy(l.getVy() - .1f);
+            if (left) {
                 //l.setVx(l.getVx() - .03f);
-                rotated+=.01;
+                l.setRotation(l.getRotation()+.005);
             }
-            if (right && l.getVx()<maxV) {
+            if (right) {
                 //l.setVx(l.getVx() + .03f);
-                rotated -=.01;
+                l.setRotation(l.getRotation()-.005);
             }
+            if (up && l.getViewAngle()<45*(Math.PI/180)) l.setViewAngle(l.getViewAngle()+.005);
+            if (down && l.getViewAngle()>-45*(Math.PI/180)) l.setViewAngle(l.getViewAngle()-.005);
             l.updatePosition();
             updateGLU(l);
             drawFloor();
@@ -64,8 +66,8 @@ double rotated = 0;
         //System.out.println(l.x + ", " + l.y);
         glLoadIdentity();
         glMatrixMode(GL_PROJECTION);
-        gluPerspective(30f, 1.0f, 10f, -10f);
-        gluLookAt(l.x,5,l.y,(float)(l.x+Math.sin(rotated)),5,(float)(l.y+Math.cos(rotated)),0,1,0);
+        gluPerspective(30f, 1.0f, .1f, 90f);
+        gluLookAt(l.getX(),5,l.getY(),(float)(l.getX()+Math.sin(l.getRotation())),5+(float)Math.tan(l.getViewAngle()),(float)(l.getY()+Math.cos(l.getRotation())),0,1,0);
        // gluLookAt(l.x,100,l.y,0,0,0,0,1,0);
     }
     public void drawFloor() {

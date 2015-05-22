@@ -2,7 +2,8 @@
  * Created by samnoyes on 5/20/15.
  */
 public class PlayerLogic {
-    float vx,vy,x,y;
+    private float vx,vy,x,y;
+    private double rotate,viewAngle;
 
     public PlayerLogic() {
         y = 0;
@@ -24,9 +25,26 @@ public class PlayerLogic {
         return vx;
     }
     public void updatePosition() {
-        x+=vx;
-        y+=vy;
-        vy*=.97;//friction/resistance
-        vx*=.97;
+        x+=vy*(float)Math.sin(getRotation());
+        y+=vy*(float)Math.cos(getRotation());
+        vy = 0;
+    }
+    public float getX() {
+        return x;
+    }
+    public float getY() {
+        return y;
+    }
+    public void setRotation(double r) {
+        rotate = r;
+    }
+    public double getRotation() {
+        return rotate;
+    }
+    public double getViewAngle() {
+        return viewAngle;
+    }
+    public void setViewAngle(double v) {
+        viewAngle = v;
     }
 }
