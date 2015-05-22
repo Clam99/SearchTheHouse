@@ -26,7 +26,7 @@ public class PlayerLogic {
     public void updatePosition() {
         x+=vx;
         y+=vy;
-        vy*=.99;//friction/resistance
-        vx*=.99;
+        vy*=.97;//friction/resistance
+        vx*=.97;
     }
 }

@@ -17,7 +17,7 @@ import static org.lwjgl.util.glu.GLU.gluPerspective;
 
 public class TestWalker {
 
-float rotated = 0;
+double rotated = 0;
 
     public TestWalker()  {
         try {
@@ -45,8 +45,14 @@ float rotated = 0;
             float maxV = .25f;
             if (forward && l.getVy()>-maxV) l.setVy(l.getVy() - .03f);
             if (back && l.getVy()<maxV) l.setVy(l.getVy() + .03f);
-            if (left && l.getVx()>-maxV) { l.setVx(l.getVx() - .03f); }
-            if (right && l.getVx()<maxV) { l.setVx(l.getVx() + .03f); }
+            if (left && l.getVx()>-maxV) {
+                //l.setVx(l.getVx() - .03f);
+                rotated+=.01;
+            }
+            if (right && l.getVx()<maxV) {
+                //l.setVx(l.getVx() + .03f);
+                rotated -=.01;
+            }
             l.updatePosition();
             updateGLU(l);
             drawFloor();
@@ -59,7 +65,7 @@ float rotated = 0;
         glLoadIdentity();
         glMatrixMode(GL_PROJECTION);
         gluPerspective(30f, 1.0f, 10f, -10f);
-        gluLookAt(l.x,5,l.y,l.x,5,l.y-10,0,1,0);
+        gluLookAt(l.x,5,l.y,(float)(l.x+Math.sin(rotated)),5,(float)(l.y+Math.cos(rotated)),0,1,0);
        // gluLookAt(l.x,100,l.y,0,0,0,0,1,0);
     }
     public void drawFloor() {
