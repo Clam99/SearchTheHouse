@@ -39,10 +39,14 @@ public class TestWalker {
 
             boolean forward = Keyboard.isKeyDown(Keyboard.KEY_W);
             boolean back = Keyboard.isKeyDown(Keyboard.KEY_S);
+            boolean moveLeft = Keyboard.isKeyDown(Keyboard.KEY_A);
+            boolean moveRight = Keyboard.isKeyDown(Keyboard.KEY_D);
             boolean up = Keyboard.isKeyDown(Keyboard.KEY_UP);
             boolean down = Keyboard.isKeyDown(Keyboard.KEY_DOWN);
             boolean right = Keyboard.isKeyDown(Keyboard.KEY_RIGHT);
             boolean left = Keyboard.isKeyDown(Keyboard.KEY_LEFT);
+            if (moveLeft) l.setVx(l.getVx() + .1f);
+            if (moveRight) l.setVx(l.getVx() - .1f);
             if (forward) l.setVy(l.getVy() + .1f);
             if (back) l.setVy(l.getVy() - .1f);
             if (left) {

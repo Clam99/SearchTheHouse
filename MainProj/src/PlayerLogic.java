@@ -27,7 +27,12 @@ public class PlayerLogic {
     public void updatePosition() {
         x+=vy*(float)Math.sin(getRotation());
         y+=vy*(float)Math.cos(getRotation());
+
+        x+=vx*(float)Math.cos(getRotation());
+        y-=vx*(float)Math.sin(getRotation());
+
         vy = 0;
+        vx = 0;
     }
     public float getX() {
         return x;
