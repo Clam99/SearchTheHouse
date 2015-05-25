@@ -1,11 +1,8 @@
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 
-import java.awt.event.KeyListener;
-import java.util.ArrayList;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL11.glEnd;
@@ -74,11 +71,11 @@ public class TestWalker {
             if (back) l.setVz(l.getVz() - .01f);
             if (left) {
                 //l.setVx(l.getVx() - .03f);
-                l.setRotation(l.getRotation()+.002);
+                l.setRotation(l.getRotation()+.001);
             }
             if (right) {
                 //l.setVx(l.getVx() + .03f);
-                l.setRotation(l.getRotation()-.002);
+                l.setRotation(l.getRotation()-.001);
             }
             if (up && l.getViewAngle()<45*(Math.PI/180)) l.setViewAngle(l.getViewAngle()+.001);
             if (down && l.getViewAngle()>-45*(Math.PI/180)) l.setViewAngle(l.getViewAngle()-.001);
