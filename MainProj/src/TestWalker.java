@@ -47,8 +47,8 @@ public class TestWalker {
             boolean left = Keyboard.isKeyDown(Keyboard.KEY_LEFT);
             if (moveLeft) l.setVx(l.getVx() + .1f);
             if (moveRight) l.setVx(l.getVx() - .1f);
-            if (forward) l.setVy(l.getVy() + .1f);
-            if (back) l.setVy(l.getVy() - .1f);
+            if (forward) l.setVz(l.getVz() + .1f);
+            if (back) l.setVz(l.getVz() - .1f);
             if (left) {
                 //l.setVx(l.getVx() - .03f);
                 l.setRotation(l.getRotation()+.005);
@@ -67,12 +67,10 @@ public class TestWalker {
         Display.destroy();
     }
     public void updateGLU(PlayerLogic l) {
-        //System.out.println(l.x + ", " + l.y);
         glLoadIdentity();
         glMatrixMode(GL_PROJECTION);
         gluPerspective(30f, 1.0f, .1f, 90f);
-        gluLookAt(l.getX(),5,l.getY(),(float)(l.getX()+Math.sin(l.getRotation())),5+(float)Math.tan(l.getViewAngle()),(float)(l.getY()+Math.cos(l.getRotation())),0,1,0);
-       // gluLookAt(l.x,100,l.y,0,0,0,0,1,0);
+        gluLookAt(l.getX(),l.getY(),l.getZ(),(float)(l.getX()+Math.sin(l.getRotation())),l.getY()+(float)Math.tan(l.getViewAngle()),(float)(l.getZ()+Math.cos(l.getRotation())),0,1,0);
     }
     public void drawFloor() {
         int rows = 20;
@@ -80,7 +78,7 @@ public class TestWalker {
         int width = 20;
         for (int i = -rows/2; i<rows/2;i++) {
             for (int j = -cols/2; j<cols/2;j++) {
-                drawSquare(width,width*j,0,width*i, ((float)j/(float)cols)*(float)255, ((float)i/(float)rows)*(float)255,1);
+                drawSquare(width,width*j,0,width*i, ((float)(j)/(float)cols)*(float)255, ((float)(i)/(float)rows)*(float)255,1);
             }
         }
     }
@@ -88,9 +86,9 @@ public class TestWalker {
         glBegin(GL_QUADS);
         glColor3d(r,g,b);
         glVertex3d(x-(width/2),y,z-(width/2));
-        glVertex3d(x-(width/2),0,z+(width/2));
-        glVertex3d(x+(width/2),0,z+(width/2));
-        glVertex3d(x+(width/2),0,z-(width/2));
+        glVertex3d(x-(width/2),y,z+(width/2));
+        glVertex3d(x+(width/2),y,z+(width/2));
+        glVertex3d(x+(width/2),y,z-(width/2));
         glEnd();
     }
 }
