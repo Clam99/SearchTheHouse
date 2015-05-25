@@ -15,7 +15,7 @@ public class Vector {
         return multiplyVector(dotProduct(v)/(getMagnitude()*getMagnitude()));
     }
     public float dotProduct(Vector v) {
-        return a*x+b*y+c*z;
+        return v.getX()*x+v.getY()*y+v.getZ()*z;
     }
     public Vector multiplyVector(float a) {
         return new Vector(x*a,y*a,z*a);
@@ -31,5 +31,8 @@ public class Vector {
     }
     public float getZ() {
         return z;
+    }
+    public Vector addVector(Vector v) {
+        return new Vector(x+v.getX(),y+v.getY(),z+v.getZ());
     }
 }

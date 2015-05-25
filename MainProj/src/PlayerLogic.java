@@ -67,12 +67,15 @@ public class PlayerLogic {
         viewAngle = v;
     }
     public boolean isLookingAt(float a, float b, float c) {
-        boolean closeEnough = isWithinUnitsOf(20,a,b,c);
-        boolean facingObj = false;
-
-        return closeEnough;
+        boolean closeEnough = isWithinUnitsOf(20,new Vector(a,b,c),new Vector(x,y,z));
+        Vector toObj = new Vector(a-x,b-y,c-z);
+        boolean isFacing = isWithinUnitsOf(5,new Vector(x,y,z).addVector(toObj.projectOnto(getFacingVector())),new Vector(x,y,z).addVector(toObj));
+        return closeEnough && isFacing;
     }
-    public boolean isWithinUnitsOf(float units, float a, float b, float c) {
-        return (Math.sqrt((a-x)*(a-x)+(b-y)*(b-y)+(c-z)*(c-z))<units);
+    public boolean isWithinUnitsOf(float units, Vector v, Vector v2) {
+        return (Math.sqrt((v.getX()-v2.getX())*(v.getX()-v2.getX())+(v.getY()-v2.getY())*(v.getY()-v2.getY())+(v.getZ()-v2.getZ())*(v.getZ()-v2.getZ()))<units);
+    }
+    public Vector getFacingVector() {
+        return new Vector((float)Math.sin(getRotation()),(float)Math.sin(viewAngle),(float)Math.cos(getRotation()));
     }
 }

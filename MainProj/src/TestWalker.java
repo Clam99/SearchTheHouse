@@ -16,7 +16,7 @@ import static org.lwjgl.util.glu.GLU.gluPerspective;
  */
 
 public class TestWalker {
-
+    boolean isLookingAtOrigin;
 
     public TestWalker()  {
         try {
@@ -59,6 +59,10 @@ public class TestWalker {
             }
             if (up && l.getViewAngle()<45*(Math.PI/180)) l.setViewAngle(l.getViewAngle()+.005);
             if (down && l.getViewAngle()>-45*(Math.PI/180)) l.setViewAngle(l.getViewAngle()-.005);
+            if (l.isLookingAt(0,0,0) != isLookingAtOrigin) {
+                isLookingAtOrigin = !isLookingAtOrigin;
+                System.out.println(l.isLookingAt(0,0,0));
+            }
             l.updatePosition();
             updateGLU(l);
             drawFloor();
@@ -76,11 +80,12 @@ public class TestWalker {
         int rows = 20;
         int cols = 20;
         int width = 20;
-        for (int i = -rows/2; i<rows/2;i++) {
+        /*for (int i = -rows/2; i<rows/2;i++) {
             for (int j = -cols/2; j<cols/2;j++) {
                 drawSquare(width,width*j,0,width*i, ((float)(j)/(float)cols)*(float)255, ((float)(i)/(float)rows)*(float)255,1);
             }
-        }
+        }*/
+        drawSquare(10,0,0,0,1,1,1);
     }
     public void drawSquare(float width, float x,float y, float z, float r, float g, float b) {
         glBegin(GL_QUADS);
