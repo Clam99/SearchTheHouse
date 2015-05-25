@@ -67,7 +67,12 @@ public class PlayerLogic {
         viewAngle = v;
     }
     public boolean isLookingAt(float a, float b, float c) {
-        //return (Math.sqrt((a-x)*(a-x)+(b-y)*(b-y))<20 && );
-        return false;
+        boolean closeEnough = isWithinUnitsOf(20,a,b,c);
+        boolean facingObj = false;
+
+        return closeEnough;
+    }
+    public boolean isWithinUnitsOf(float units, float a, float b, float c) {
+        return (Math.sqrt((a-x)*(a-x)+(b-y)*(b-y)+(c-z)*(c-z))<units);
     }
 }
