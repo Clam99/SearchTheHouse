@@ -55,6 +55,21 @@ public class zyWall implements Wall {
 		}
 		else return false;
 	}
+
+    @Override
+    public float getPosx() {
+        return posx;
+    }
+
+    @Override
+    public float getPosz() {
+        return posz;
+    }
+
+    @Override
+    public Vector getSurfaceVector() {
+        return new Vector(0,0,1);
+    }
 }
 
 

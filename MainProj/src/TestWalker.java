@@ -4,6 +4,8 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 
 
+import java.util.ArrayList;
+
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL11.glEnd;
 import static org.lwjgl.util.glu.GLU.gluLookAt;
@@ -29,7 +31,7 @@ public class TestWalker {
         Display.setDisplayMode(new DisplayMode(800, 800));
         Display.create();
         glMatrixMode(GL_PROJECTION);
-        gluPerspective(50f, 1.0f, -1000f, 1000f);
+        gluPerspective(70f, 1.0f, -1000f, 1000f);
         gluLookAt(0,0,10,0,0,0,0,1,0);
         glEnable(GL_DEPTH_TEST);
         ArrayList<Wall> walls = new ArrayList<Wall>(20);
@@ -71,11 +73,11 @@ public class TestWalker {
             if (back) l.setVz(l.getVz() - .01f);
             if (left) {
                 //l.setVx(l.getVx() - .03f);
-                l.setRotation(l.getRotation()+.001);
+                l.setRotation(l.getRotation()+.003);
             }
             if (right) {
                 //l.setVx(l.getVx() + .03f);
-                l.setRotation(l.getRotation()-.001);
+                l.setRotation(l.getRotation()-.003);
             }
             if (up && l.getViewAngle()<45*(Math.PI/180)) l.setViewAngle(l.getViewAngle()+.001);
             if (down && l.getViewAngle()>-45*(Math.PI/180)) l.setViewAngle(l.getViewAngle()-.001);
@@ -86,17 +88,29 @@ public class TestWalker {
             
             for (Wall wall: walls) {
             	if(wall.testCollision(l.getX(), l.getZ())) {
-            		if (moveRight) l.setVx(l.getVx()+.02f);
+            		/*if (moveRight) l.setVx(l.getVx()+.02f);
             		if (moveLeft) l.setVx(l.getVx()-.02f);
             		if (forward) l.setVz(l.getVz()-.02f);
-            		if (back) l.setVx(l.getVx()+.02f);
-            	}
+            		if (back) l.setVx(l.getVx()+.02f);*/
+                    Vector currentMovement = l.getFacingVector();
+                    currentMovement.scaleVector(new Vector(l.getVx(),0,l.getVz()).getMagnitude());
+                    Vector newCurr = new Vector(currentMovement.getX(),0,currentMovement.getZ());
+                    Vector projection = newCurr.projectOnto(wall.getSurfaceVector());
+                    System.out.println("Current movement: " + currentMovement);
+                    System.out.println("Wall: " + wall.getSurfaceVector());
+                    System.out.println(projection);
+                    l.setVx(projection.getX());
+                    l.setVy(projection.getY());
+                    l.setVz(projection.getZ());
+                    break;
+                    //System.out.println("Colliding");
+                }
             }
             l.updatePosition();
             updateGLU(l);
             glColor3f(1,1,1);
     		for (Wall wall : walls){
-    			glColor3f(wall.getPosX()/20, 1, wall.getPosZ()/20);
+    			glColor3f(wall.getPosx()/20, 1, wall.getPosz()/20);
     			wall.draw();
     			//x++;
     		}
@@ -122,7 +136,7 @@ public class TestWalker {
     public void updateGLU(PlayerLogic l) {
         glLoadIdentity();
         glMatrixMode(GL_PROJECTION);
-        gluPerspective(30f, 1.0f, .1f, 90f);
+        gluPerspective(50f, 1.0f, .1f, 90f);
         gluLookAt(l.getX(),l.getY(),l.getZ(),(float)(l.getX()+Math.sin(l.getRotation())),l.getY()+(float)Math.tan(l.getViewAngle()),(float)(l.getZ()+Math.cos(l.getRotation())),0,1,0);
     }
     public void drawFloor() {
@@ -134,7 +148,7 @@ public class TestWalker {
                 drawSquare(width,width*j,0,width*i, ((float)(j)/(float)cols)*(float)255, ((float)(i)/(float)rows)*(float)255,1);
             }
         }*/
-        drawSquare(10,0,0,0,1,1,1);
+        //drawSquare(10,0,0,0,1,1,1);
     }
     public void drawSquare(float width, float x,float y, float z, float r, float g, float b) {
         glBegin(GL_QUADS);

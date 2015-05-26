@@ -9,7 +9,7 @@ public class PlayerLogic {
     private boolean didPrint = false;
 
     public PlayerLogic() {
-        y = 5;
+        y = 1;
         x = 0;
         z = 0;
         vx = 0;
@@ -70,9 +70,9 @@ public class PlayerLogic {
         viewAngle = v;
     }
     public boolean isLookingAt(float a, float b, float c) {
-        //boolean closeEnough = isWithinUnitsOf(50,new Vector(a,b,c),new Vector(x,y,z));
+        boolean closeEnough = isWithinUnitsOf(50,new Vector(a,b,c),new Vector(x,y,z));
         Vector toObj = new Vector(a,b,c).subtractVector(new Vector(x,y,z));
-        boolean isFacing = isWithinUnitsOf(5,   new Vector(x,y,z).addVector(toObj.projectOnto(getFacingVector()))   ,   new Vector(a,b,c));
+        boolean isFacing = isWithinUnitsOf(2,   new Vector(x,y,z).addVector(toObj.projectOnto(getFacingVector()))   ,   new Vector(a,b,c));
 
        /* if (Keyboard.isKeyDown(Keyboard.KEY_0) && !didPrint) {
             System.out.println("Current Location: " + new Vector(x,y,z));
@@ -87,7 +87,7 @@ public class PlayerLogic {
             didPrint = false;
         }*/
 
-        return isFacing;
+        return isFacing && closeEnough;
     }
     public boolean isWithinUnitsOf(float units, Vector v, Vector v2) {
         //System.out.println((Math.sqrt((v.getX()-v2.getX())*(v.getX()-v2.getX())+(v.getY()-v2.getY())*(v.getY()-v2.getY())+(v.getZ()-v2.getZ())*(v.getZ()-v2.getZ()))));
