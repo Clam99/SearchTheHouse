@@ -70,7 +70,7 @@ public class PlayerLogic {
         viewAngle = v;
     }
     public boolean isLookingAt(float a, float b, float c) {
-        boolean closeEnough = isWithinUnitsOf(10,new Vector(a,b,c),new Vector(x,y,z));
+        boolean closeEnough = isWithinUnitsOf(3,new Vector(a,b,c),new Vector(x,y,z));
         Vector toObj = new Vector(a,b,c).subtractVector(new Vector(x,y,z));
         boolean isFacing = isWithinUnitsOf(2,   new Vector(x,y,z).addVector(toObj.projectOnto(getFacingVector()))   ,   new Vector(a,b,c));
 
