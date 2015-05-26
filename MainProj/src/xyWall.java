@@ -18,6 +18,14 @@ public class xyWall implements Wall{
 		this.posz=posz;
 	}
 	
+	public float getPosX() {
+		return posx;
+	}
+	
+	public float getPosZ() {
+		return posz;
+	}
+	
 	public void draw() {
 		
 		if(!door){
@@ -50,25 +58,10 @@ public class xyWall implements Wall{
 	}
 	
 	public boolean testCollision(float cx, float cz) {
-		if ((cx>=posx && cx<=(posx+x)) && cz>=(posz-1) && cz<=posz+1) {
+		if ((cx>=posx && cx<=(posx+x)) && cz<=posz+.1 && cz>posz-.1) {
 			if (door && cx>(posx+x/3) && cx<(posx+2*x/3)) return false;
 			else return true;
 		}
 		else return false;
 	}
-    @Override
-     public float getPosx() {
-        return posx;
-    }
-
-    @Override
-    public float getPosz() {
-        return posz;
-    }
-
-    @Override
-    public Vector getSurfaceVector() {
-        return new Vector(1,0,0);
-    }
 }
-
