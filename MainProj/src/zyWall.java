@@ -17,6 +17,14 @@ public class zyWall implements Wall {
 		this.posz=posz;
 	}
 	
+	public float getPosX() {
+		return posx;
+	}
+	
+	public float getPosZ() {
+		return posz;
+	}
+	
 	public void draw() {
 	
 		if(!door){
@@ -48,30 +56,11 @@ public class zyWall implements Wall {
 			glEnd();
 	}
 		
-	public boolean testCollision(float cz, float cx) {
-		if ((cz>=posz && cz<=(posz+z)) && cx==posx) {
+	public boolean testCollision(float cx, float cz) {
+		if ((cz>=posz && cz<=(posz+z)) && cx<=posx+.1 && cx>posx-.1) {
 			if (door && cz>(posz+z/3) && cz<(posz+2*z/3)) return false;
 			else return true;
 		}
 		else return false;
 	}
-
-    @Override
-    public float getPosx() {
-        return posx;
-    }
-
-    @Override
-    public float getPosz() {
-        return posz;
-    }
-
-    @Override
-    public Vector getSurfaceVector() {
-        return new Vector(0,0,1);
-    }
 }
-
-
-
-
