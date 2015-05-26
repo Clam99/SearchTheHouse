@@ -64,3 +64,7 @@ public class zyWall implements Wall {
 		else return false;
 	}
 }
+
+
+
+

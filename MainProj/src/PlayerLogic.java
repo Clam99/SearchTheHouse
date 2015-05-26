@@ -70,11 +70,11 @@ public class PlayerLogic {
         viewAngle = v;
     }
     public boolean isLookingAt(float a, float b, float c) {
-        boolean closeEnough = isWithinUnitsOf(50,new Vector(a,b,c),new Vector(x,y,z));
+        boolean closeEnough = isWithinUnitsOf(10,new Vector(a,b,c),new Vector(x,y,z));
         Vector toObj = new Vector(a,b,c).subtractVector(new Vector(x,y,z));
         boolean isFacing = isWithinUnitsOf(2,   new Vector(x,y,z).addVector(toObj.projectOnto(getFacingVector()))   ,   new Vector(a,b,c));
 
-       /* if (Keyboard.isKeyDown(Keyboard.KEY_0) && !didPrint) {
+        if (Keyboard.isKeyDown(Keyboard.KEY_0) && !didPrint) {
             System.out.println("Current Location: " + new Vector(x,y,z));
             System.out.println("Object Location: " + new Vector(a,b,c));
             System.out.println("Vector from camera to object: " + toObj);
@@ -85,7 +85,7 @@ public class PlayerLogic {
         }
         else if (!Keyboard.isKeyDown(Keyboard.KEY_0)) {
             didPrint = false;
-        }*/
+        }
 
         return isFacing && closeEnough;
     }
