@@ -2,13 +2,16 @@
  * Created by smurphy on 5/26/15.
  */
 public class PlayerObject {
-    private ObjectType type;
     private float x,y,z;
     private float size;
-    private boolean wasFound = false;
+    protected boolean wasFound = false;
+    protected boolean isDisplayed = true;
 
-    public PlayerObject(ObjectType t, float xp, float yp, float zp, float size) {
-        type = t;
+    public boolean isDisplayed() {
+        return isDisplayed;
+    }
+
+    public PlayerObject(float xp, float yp, float zp, float size) {
         x = xp;
         y = yp;
         z = zp;
@@ -43,16 +46,12 @@ public class PlayerObject {
         return wasFound;
     }
 
-    public ObjectType getType() {
-        return type;
-    }
-
     public float getSize() {
 
         return size;
     }
 
     public void find() {
-        wasFound = true;
+
     }
 }

@@ -73,4 +73,9 @@ public class xyWall implements Wall{
 	public Vector getNormalVector() {
 		return new Vector(0,0,1);
 	}
+
+    @Override
+    public void close() {
+        door = false;
+    }
 }

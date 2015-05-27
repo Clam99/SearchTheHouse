@@ -42,7 +42,7 @@ public class TestWalker {
         ArrayList<Wall> walls = new ArrayList<Wall>(20);
     	walls.add(new xyWall(17,3,1,1, false));
     	walls.add(new xyWall(4,3,1,5, true));
-    	walls.add(new xyWall(5,3,5,5, true));
+    	walls.add(new xyWall(5,3,5,5, false));
     	walls.add(new xyWall(3,3,10,5, false));
     	walls.add(new xyWall(5,3,13,5, true));
     	walls.add(new xyWall(5,3,5,8, true));
@@ -53,13 +53,13 @@ public class TestWalker {
     	walls.add(new zyWall(11,3,1,1, false));
     	walls.add(new zyWall(4,3,5,1, false));
     	walls.add(new zyWall(4,3,10,1, true));
-    	walls.add(new zyWall(4,3,13,1, true));
+    	walls.add(new zyWall(4,3,13,1, false));
     	walls.add(new zyWall(11,3,18,1, false));
     	walls.add(new zyWall(3,3,10,5, true));
     	walls.add(new zyWall(3,3,13,5, true));
     	walls.add(new zyWall(4,3,5,8, false));
     	walls.add(new zyWall(4,3,10,8, false));
-    	walls.add(new zyWall(4,3,13,8, true));
+    	walls.add(new zyWall(4,3,13,8, false));
 
         /*ArrayList<PlayerObject> objects = new ArrayList<PlayerObject>();
         objects.add(new PlayerObject(ObjectType.KEYS,16,0,10,.5f));
@@ -71,7 +71,14 @@ public class TestWalker {
 		font = new TrueTypeFont(awtFont, false);
 		
     	ArrayList<PlayerObject> objects = new ArrayList<PlayerObject>();
-    	objects.add(new PlayerObject(ObjectType.KEYS,0,0,20,.5f));
+    	objects.add(new Keys(walls.get(8),0,0,20,.5f));
+        objects.add(new Keys(walls.get(16),12,0,9,.5f));
+        objects.add(new Keys(walls.get(7),10,0,9,.5f));
+        objects.add(new Keys(walls.get(15),4,0,7,.5f));
+        objects.add(new Keys(walls.get(3),11,0,6,.5f));
+        objects.add(new Keys(walls.get(1),9,0,4,.5f));
+        objects.add(new Keys(walls.get(12),11,0,2,.5f));
+        objects.add(new Teleporter(3,0,3,.5f));
     	
         while (!Display.isCloseRequested()) {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -112,7 +119,6 @@ public class TestWalker {
                 for (PlayerObject obj : objects) {
                     if (l.isLookingAt(obj.getX(), obj.getY(), obj.getZ())) {
                         obj.find();
-                        entrance.open();
                     }
                 }
             }
@@ -169,7 +175,7 @@ public class TestWalker {
             }
 
             for (PlayerObject obj: objects) {
-                if (!obj.isFound()) { drawCube(obj.getX(),obj.getY(),obj.getZ(), obj.getSize());}
+                if (obj.isDisplayed()) { drawCube(obj.getX(),obj.getY(),obj.getZ(), obj.getSize());}
             }
             
             l.updatePosition();

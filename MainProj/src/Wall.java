@@ -1,6 +1,7 @@
 public interface Wall {
 	
 	public abstract void open();
+	public abstract void close();
 
 	public abstract void draw();
 	

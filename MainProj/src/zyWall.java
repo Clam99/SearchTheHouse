@@ -72,6 +72,11 @@ public class zyWall implements Wall {
 	public Vector getNormalVector() {
 		return new Vector(1,0,0);
 	}
+
+	@Override
+	public void close() {
+		door = false;
+	}
 }
 
 
