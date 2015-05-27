@@ -1,19 +1,16 @@
-/**
- * Created by smurphy on 5/26/15.
- */
 public class Teleporter extends PlayerObject {
-    float tx,ty,tz;
+    private float tx,tz;
 
-    public Teleporter(float xp, float yp, float zp, float tx, float ty, float tz, float size) {
-        super(xp, yp, zp, size);
+    public Teleporter(float xp, float zp, float tx, float tz, float size) {
+        super(xp, 0, zp, 0, 0, 1, size);
         this.tx = tx;
-        this.ty = ty;
         this.tz = tz;
     }
 
-    public void find(PlayerLogic l) {
+    public boolean find(PlayerLogic l) {
         //super.find(l);
         l.setX(tx);
         l.setZ(tz);
+        return false;
     }
 }
