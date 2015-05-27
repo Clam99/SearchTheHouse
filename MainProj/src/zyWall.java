@@ -1,9 +1,4 @@
-import org.lwjgl.LWJGLException;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.DisplayMode;
-
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.util.glu.GLU.*;
 
 public class zyWall implements Wall {
 	
@@ -23,6 +18,10 @@ public class zyWall implements Wall {
 	
 	public float getPosZ() {
 		return posz;
+	}
+	
+	public void open() {
+		door=true;
 	}
 	
 	public void draw() {
@@ -57,13 +56,14 @@ public class zyWall implements Wall {
 	}
 		
 	public boolean testCollision(float cx, float cz) {
-		if ((cz>=posz && cz<=(posz+z)) && cx<=posx+.1 && cx>posx-.1) {
+		if ((cz>=posz && cz<=(posz+z)) && cx<=posx+.2 && cx>posx-.2) {
 			if (door && cz>(posz+z/3) && cz<(posz+2*z/3)) return false;
 			else return true;
 		}
 		else return false;
 	}
 }
+
 
 
 
