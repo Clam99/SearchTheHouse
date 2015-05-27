@@ -57,10 +57,20 @@ public class xyWall implements Wall{
 	}
 	
 	public boolean testCollision(float cx, float cz) {
-		if ((cx>=posx && cx<=(posx+x)) && cz<=posz+.2 && cz>posz-.2) {
+		if ((cx>=posx && cx<=(posx+x)) && cz<=posz+.5 && cz>posz-.5) {
 			if (door && cx>(posx+x/3) && cx<(posx+2*x/3)) return false;
 			else return true;
 		}
 		else return false;
+	}
+
+	@Override
+	public Vector getSurfaceVector() {
+		return new Vector(1,0,0);
+	}
+
+	@Override
+	public Vector getNormalVector() {
+		return new Vector(0,0,1);
 	}
 }

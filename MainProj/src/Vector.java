@@ -42,4 +42,7 @@ public class Vector {
     public String toString() {
         return "(" + x + ", " + y + ", " + z + ")";
     }
+    public void setMagnitude(float mag) {
+        scaleVector(mag/getMagnitude());
+    }
 }

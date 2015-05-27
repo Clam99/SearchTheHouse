@@ -1,8 +1,4 @@
 public interface Wall {
-
-	public abstract float getPosX();
-	
-	public abstract float getPosZ();
 	
 	public abstract void open();
 
@@ -10,4 +6,8 @@ public interface Wall {
 	
 	public abstract boolean testCollision(float x, float z);
 
+	public abstract float getPosX();
+	public abstract float getPosZ();
+	public abstract Vector getSurfaceVector();
+	public abstract Vector getNormalVector();
 }

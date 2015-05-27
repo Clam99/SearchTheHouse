@@ -56,11 +56,21 @@ public class zyWall implements Wall {
 	}
 		
 	public boolean testCollision(float cx, float cz) {
-		if ((cz>=posz && cz<=(posz+z)) && cx<=posx+.2 && cx>posx-.2) {
+		if ((cz>=posz && cz<=(posz+z)) && cx<=posx+.5 && cx>posx-.5) {
 			if (door && cz>(posz+z/3) && cz<(posz+2*z/3)) return false;
 			else return true;
 		}
 		else return false;
+	}
+
+	@Override
+	public Vector getSurfaceVector() {
+		return new Vector(0,0,1);
+	}
+
+	@Override
+	public Vector getNormalVector() {
+		return new Vector(1,0,0);
 	}
 }
 

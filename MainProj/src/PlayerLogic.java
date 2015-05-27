@@ -34,6 +34,19 @@ public class PlayerLogic {
     public float getVz() {
         return vz;
     }
+
+    public void setX(float x) {
+        this.x = x;
+    }
+
+    public void setY(float y) {
+        this.y = y;
+    }
+
+    public void setZ(float z) {
+        this.z = z;
+    }
+
     public void updatePosition() {
         x+=vx*Math.cos(getRotation());
         z-=vx*Math.sin(getRotation());
@@ -42,10 +55,6 @@ public class PlayerLogic {
         z+=vz*Math.cos(getRotation());
 
         y+=vy;
-
-        vy = 0;
-        vx = 0;
-        vz = 0;
     }
     public float getX() {
         return x;
