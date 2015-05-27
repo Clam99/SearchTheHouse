@@ -1,3 +1,5 @@
+package lwgl2;
+
 import org.lwjgl.input.Keyboard;
 
 /**
@@ -5,13 +7,15 @@ import org.lwjgl.input.Keyboard;
  */
 public class PlayerLogic {
     private float vx,vy,vz, x,y,z;//coordinates of the player
-    private double rotate,viewAngle;
+    private double rotate=Math.PI,viewAngle;
     private boolean didPrint = false;
+    protected boolean wasFound = false;
+    protected boolean isDisplayed = true;
 
     public PlayerLogic() {
-        y = 1;
-        x = 0;
-        z = 0;
+        y = 1.5f;
+        x = 12.5f;
+        z = 15.5f;
         vx = 0;
         vy = 0;
     }
@@ -34,19 +38,20 @@ public class PlayerLogic {
     public float getVz() {
         return vz;
     }
-
     public void setX(float x) {
-        this.x = x;
+        this.x=x;
     }
-
     public void setY(float y) {
-        this.y = y;
+        this.y=y;
     }
-
     public void setZ(float z) {
-        this.z = z;
+        this.z=z;
     }
-
+    public void setPos(float x, float y, float z) {
+        this.x=x;
+        this.y=y;
+        this.z=z;
+    }
     public void updatePosition() {
         x+=vx*Math.cos(getRotation());
         z-=vx*Math.sin(getRotation());
@@ -99,7 +104,6 @@ public class PlayerLogic {
         return isFacing && closeEnough;
     }
     public boolean isWithinUnitsOf(float units, Vector v, Vector v2) {
-        //System.out.println((Math.sqrt((v.getX()-v2.getX())*(v.getX()-v2.getX())+(v.getY()-v2.getY())*(v.getY()-v2.getY())+(v.getZ()-v2.getZ())*(v.getZ()-v2.getZ()))));
         return (v.subtractVector(v2).getMagnitude()<units);
 
     }
