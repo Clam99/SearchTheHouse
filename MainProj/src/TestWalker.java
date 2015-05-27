@@ -1,17 +1,18 @@
+package lwgl2;
+
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 
-import java.awt.*;
 import java.util.ArrayList;
-import com.sun.opengl.util.j2d.TextRenderer;
+import java.awt.Font;
 
+import org.newdawn.slick.Color;
+import org.newdawn.slick.TrueTypeFont;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11.glEnd;
-import static org.lwjgl.util.glu.GLU.gluLookAt;
-import static org.lwjgl.util.glu.GLU.gluPerspective;
+import static org.lwjgl.util.glu.GLU.*;
 
 /**
  * Created by samnoyes on 5/14/15.
@@ -19,7 +20,7 @@ import static org.lwjgl.util.glu.GLU.gluPerspective;
 
 public class TestWalker {
     boolean isLookingAtOrigin;
-
+    private TrueTypeFont font, font2;
 
     public TestWalker()  {
         try {
@@ -30,15 +31,15 @@ public class TestWalker {
         }
     }
     public void start() throws org.lwjgl.LWJGLException {
-    	//TextRenderer renderer = new TextRenderer(new Font("Arial", Font.BOLD, 36));
         PlayerLogic l = new PlayerLogic();
         Display.setDisplayMode(new DisplayMode(800, 800));
         Display.create();
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glMatrixMode(GL_PROJECTION);
         gluPerspective(50f, 1.0f, -1000f, 1000f);
         gluLookAt(0,0,10,0,0,0,0,1,0);
         glEnable(GL_DEPTH_TEST);
-
+        Wall entrance = new xyWall(4,3,1,12, false);
         ArrayList<Wall> walls = new ArrayList<Wall>(20);
     	walls.add(new xyWall(17,3,1,1, false));
     	walls.add(new xyWall(4,3,1,5, true));
@@ -48,7 +49,7 @@ public class TestWalker {
     	walls.add(new xyWall(5,3,5,8, true));
     	walls.add(new xyWall(3,3,10,8, false));
     	walls.add(new xyWall(5,3,13,8, true));
-    	walls.add(new xyWall(4,3,1,12, true));
+    	walls.add(entrance);
     	walls.add(new xyWall(13,3,5,12, false));
     	walls.add(new zyWall(11,3,1,1, false));
     	walls.add(new zyWall(4,3,5,1, false));
@@ -60,12 +61,17 @@ public class TestWalker {
     	walls.add(new zyWall(4,3,5,8, false));
     	walls.add(new zyWall(4,3,10,8, false));
     	walls.add(new zyWall(4,3,13,8, true));
-
-        ArrayList<PlayerObject> objects = new ArrayList<PlayerObject>();
-        objects.add(new PlayerObject(ObjectType.KEYS,0,0,0,.5f));
+    	
+    	Font awtFont = new Font("Times New Roman", Font.BOLD, 50);
+		font = new TrueTypeFont(awtFont, false);
+		
+    	ArrayList<PlayerObject> objects = new ArrayList<PlayerObject>();
+    	objects.add(new PlayerObject(ObjectType.KEYS,0,0,0,.5f));
     	
         while (!Display.isCloseRequested()) {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+            updateGLU(l);
 
             boolean forward = Keyboard.isKeyDown(Keyboard.KEY_W);
             boolean back = Keyboard.isKeyDown(Keyboard.KEY_S);
@@ -81,11 +87,9 @@ public class TestWalker {
             if (forward) l.setVz(l.getVz() + .01f);
             if (back) l.setVz(l.getVz() - .01f);
             if (left) {
-                //l.setVx(l.getVx() - .03f);
                 l.setRotation(l.getRotation()+.003);
             }
             if (right) {
-                //l.setVx(l.getVx() + .03f);
                 l.setRotation(l.getRotation()-.003);
             }
             if (up && l.getViewAngle()<45*(Math.PI/180)) l.setViewAngle(l.getViewAngle()+.003);
@@ -94,11 +98,12 @@ public class TestWalker {
                 isLookingAtOrigin = !isLookingAtOrigin;
                 System.out.println(l.isLookingAt(0,0,0));
             }
-
+            
             if (space) {
                 for (PlayerObject obj : objects) {
                     if (l.isLookingAt(obj.getX(), obj.getY(), obj.getZ())) {
                         obj.find();
+                        entrance.open();
                     }
                 }
             }
@@ -108,24 +113,20 @@ public class TestWalker {
             		if (moveRight) l.setVx(l.getVx()+.1f);
             		if (moveLeft) l.setVx(l.getVx()-.1f);
             		if (forward) l.setVz(l.getVz()-.1f);
-            		if (back) l.setVz(l.getVz()+.1f);
-            		//System.out.println("collision");
-            	}
+            		if (back) l.setVz(l.getVz()+.1f);            	}
             }
 
             for (PlayerObject obj: objects) {
-                if (!obj.isFound()) { drawCube(obj.getX(),obj.getY(),obj.getZ(), obj.getSize()); }
+                if (!obj.isFound()) { drawCube(obj.getX(),obj.getY(),obj.getZ(), obj.getSize());}
             }
-
+            
             l.updatePosition();
-            updateGLU(l);
             glColor3f(1,1,1);
     		for (Wall wall : walls){
     			glColor3f(wall.getPosX()/20, 1, wall.getPosZ()/20);
     			wall.draw();
-    			//x++;
     		}
-    		/*glColor3f(1,.2f,.2f);
+    		glColor3f(1,.2f,.2f);
     		glBegin(GL_QUADS);
     		glVertex3f(1,0,1);
     		glVertex3f(18,0,1);
@@ -138,66 +139,25 @@ public class TestWalker {
     		glVertex3f(-1,0,1);
     		glVertex3f(-1,0,-1);
     		glVertex3f(1,0,-1);
-    		glEnd();*/
-            //drawFloor();
+    		glEnd();
+    		
+    		make2D();
+    		Color.white.bind();
+            font.drawString(200, 200, "Test", Color.yellow);
+            
             Display.update();
         }
         Display.destroy();
     }
     public void updateGLU(PlayerLogic l) {
-        glLoadIdentity();
+    	glDisable(GL_BLEND);
+        glMatrixMode(GL_PROJECTION);
+    	glLoadIdentity();
         glMatrixMode(GL_PROJECTION);
         gluPerspective(50f, 1.0f, .1f, 90f);
         gluLookAt(l.getX(),l.getY(),l.getZ(),(float)(l.getX()+Math.sin(l.getRotation())),l.getY()+(float)Math.tan(l.getViewAngle()),(float)(l.getZ()+Math.cos(l.getRotation())),0,1,0);
-        /*if (moveRight) l.setVx(l.getVx()+.02f);
-            		if (moveLeft) l.setVx(l.getVx()-.02f);
-            		if (forward) l.setVz(l.getVz()-.02f);
-            		if (back) l.setVx(l.getVx()+.02f);
-                    Vector currentMovement = new Vector(l.getVx(),0,l.getVz());
-                    currentMovement.scaleVector(new Vector(l.getVx(),0,l.getVz()).getMagnitude());
-                    Vector newCurr = new Vector(currentMovement.getX(),0,currentMovement.getZ());
-                    Vector projection = newCurr.projectOnto(wall.getSurfaceVector());
-                    System.out.println("Current movement: " + currentMovement);
-                    System.out.println("Wall: " + wall.getSurfaceVector());
-                    System.out.println(projection);
-                    l.setVx(projection.getX());
-                    l.setVy(projection.getY());
-                    l.setVz(projection.getZ());*/
-                    /*if (wall.getSurfaceVector().getX() == 1) {
-                        if (l.getVx() > 0) {
-                            l.setRotation(-3.14159/2);
-
-                            System.out.println("90");
-                        }
-                        else {
-                            l.setRotation(3.14159/2);
-
-                            System.out.println("-90");
-                        }
-
-                    }
-                    else {
-                        if (l.getVz() > 0) {
-                            l.setRotation(0);
-                            System.out.println("0");
-                        }
-                        else {
-                            l.setRotation(3.14159);
-                            System.out.println("180");
-                        }
-                    }*/
     }
-    public void drawFloor() {
-        int rows = 20;
-        int cols = 20;
-        int width = 20;
-        /*for (int i = -rows/2; i<rows/2;i++) {
-            for (int j = -cols/2; j<cols/2;j++) {
-                drawSquare(width,width*j,0,width*i, ((float)(j)/(float)cols)*(float)255, ((float)(i)/(float)rows)*(float)255,1);
-            }
-        }*/
-        //drawSquare(10,0,0,0,1,1,1);
-    }
+    
     public void drawSquare(float width, float x,float y, float z, float r, float g, float b) {
         glBegin(GL_QUADS);
         glColor3d(r,g,b);
@@ -207,7 +167,16 @@ public class TestWalker {
         glVertex3d(x+(width/2),y,z-(width/2));
         glEnd();
     }
-
+    
+    protected static void make2D() {
+        glEnable(GL_BLEND);
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glOrtho(0.0f, Display.getWidth(), Display.getHeight(), 0.0f, 0.0f, 1.0f);
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+    }
+    
     public void drawCube(float x, float y, float z, float size) {
         glBegin(GL_QUAD_STRIP);
         glVertex3d(x-size/2,y+size/2, z+size/2);
