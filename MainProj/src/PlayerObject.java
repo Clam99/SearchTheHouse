@@ -1,21 +1,21 @@
-/**
- * Created by smurphy on 5/26/15.
- */
 public class PlayerObject {
-    private float x,y,z;
-    private float size;
+    private float x, y, z, size;
     protected boolean wasFound = false;
     protected boolean isDisplayed = true;
+    public float r,g,b;
 
     public boolean isDisplayed() {
         return isDisplayed;
     }
 
-    public PlayerObject(float xp, float yp, float zp, float size) {
+    public PlayerObject(float xp, float yp, float zp, float r, float g, float b, float size) {
         x = xp;
         y = yp;
         z = zp;
         this.size = size;
+        this.r=r;
+        this.g=g;
+        this.b=b;
     }
 
     public float getX() {
@@ -51,6 +51,7 @@ public class PlayerObject {
         return size;
     }
 
-    public void find(PlayerLogic l) {
+    public boolean find(PlayerLogic l) {
+    	return false;
     }
 }
