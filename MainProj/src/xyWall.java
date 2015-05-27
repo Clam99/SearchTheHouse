@@ -21,8 +21,28 @@ public class xyWall implements Wall{
 		return posz;
 	}
 	
+	public float getWidth() {
+		return x;
+	}
+	
+	public float getHeight() {
+		return y;
+	}
+	
 	public void open() {
 		door=true;
+	}
+	
+	public void close(){
+		door=false;
+	}
+	
+	public void addX(float x) {
+		posx+=x;
+	}
+	
+	public void addZ(float z) {
+		posz+=z;
 	}
 	
 	public void draw() {
@@ -63,7 +83,11 @@ public class xyWall implements Wall{
 		}
 		else return false;
 	}
-
+	
+	public xyWall copy() {
+        return new xyWall(x,y,posx,posz,door);
+    }
+	
 	@Override
 	public Vector getSurfaceVector() {
 		return new Vector(1,0,0);
@@ -73,9 +97,4 @@ public class xyWall implements Wall{
 	public Vector getNormalVector() {
 		return new Vector(0,0,1);
 	}
-
-    @Override
-    public void close() {
-        door = false;
-    }
 }
