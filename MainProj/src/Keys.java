@@ -1,6 +1,3 @@
-/**
- * Created by smurphy on 5/26/15.
- */
 public class Keys extends DisappearingObject {
     Wall wall;
     public Keys(Wall wall, float xp, float yp, float zp, float size) {
@@ -10,9 +7,9 @@ public class Keys extends DisappearingObject {
         this.wall.close();
     }
 
-    @Override
-    public void find(PlayerLogic l) {
+    public boolean find(PlayerLogic l) {
         super.find(l);
         wall.open();
+        return false;
     }
 }
