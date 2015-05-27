@@ -11,8 +11,8 @@ public class Keys extends DisappearingObject {
     }
 
     @Override
-    public void find() {
-        super.find();
+    public void find(PlayerLogic l) {
+        super.find(l);
         wall.open();
     }
 }

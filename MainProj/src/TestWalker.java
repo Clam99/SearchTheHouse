@@ -20,6 +20,7 @@ public class TestWalker {
     boolean isLookingAtOrigin;
     private TrueTypeFont font, font2;
     float MOVE_BY = 0.01f;
+    boolean spacePressed = false;
 
     public TestWalker()  {
         try {
@@ -69,7 +70,12 @@ public class TestWalker {
     	
     	Font awtFont = new Font("Times New Roman", Font.BOLD, 50);
 		font = new TrueTypeFont(awtFont, false);
-		
+
+
+        Teleporter t1 = new Teleporter(0,0,0,3,1.5f,3,.5f);
+        Teleporter t2 = new Teleporter(3,0,3,0,1.5f,0,.5f);
+
+
     	ArrayList<PlayerObject> objects = new ArrayList<PlayerObject>();
     	objects.add(new Keys(walls.get(8),0,0,20,.5f));
         objects.add(new Keys(walls.get(16),12,0,9,.5f));
@@ -78,7 +84,8 @@ public class TestWalker {
         objects.add(new Keys(walls.get(3),11,0,6,.5f));
         objects.add(new Keys(walls.get(1),9,0,4,.5f));
         objects.add(new Keys(walls.get(12),11,0,2,.5f));
-        objects.add(new Teleporter(3,0,3,.5f));
+        objects.add(t1);
+        objects.add(t2);
     	
         while (!Display.isCloseRequested()) {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -115,12 +122,17 @@ public class TestWalker {
                 System.out.println(l.isLookingAt(0,0,0));
             }
             
-            if (space) {
+            if (space && !spacePressed) {
+                spacePressed = true;
                 for (PlayerObject obj : objects) {
                     if (l.isLookingAt(obj.getX(), obj.getY(), obj.getZ())) {
-                        obj.find();
+                        obj.find(l);
+                        break;
                     }
                 }
+            }
+            else if (!space) {
+                spacePressed = false;
             }
 
             for (Wall wall: walls) {

@@ -57,7 +57,7 @@ public class xyWall implements Wall{
 	}
 	
 	public boolean testCollision(float cx, float cz) {
-		if ((cx>=posx && cx<=(posx+x)) && cz<=posz+.5 && cz>posz-.5) {
+		if ((cx>=posx && cx<=(posx+x)) && cz<=posz+.2 && cz>posz-.2) {
 			if (door && cx>(posx+x/3) && cx<(posx+2*x/3)) return false;
 			else return true;
 		}

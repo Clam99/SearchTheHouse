@@ -51,7 +51,6 @@ public class PlayerObject {
         return size;
     }
 
-    public void find() {
-
+    public void find(PlayerLogic l) {
     }
 }

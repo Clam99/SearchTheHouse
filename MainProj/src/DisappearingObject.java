@@ -7,7 +7,7 @@ public class DisappearingObject extends PlayerObject {
         super(xp,yp,zp,size);
     }
 
-    public void find() {
+    public void find(PlayerLogic l) {
         wasFound = true;
         isDisplayed = false;
     }
