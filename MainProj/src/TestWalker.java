@@ -73,7 +73,7 @@ public class TestWalker {
     	ArrayList<PlayerObject> objects = new ArrayList<PlayerObject>();
     	objects.add(new Keys(walls.get(8),0,0,20,.5f));
         objects.add(new Keys(walls.get(16),12,0,9,.5f));
-        objects.add(new Keys(walls.get(7),10,0,9,.5f));
+        objects.add(new Keys(walls.get(7),8,0,9,.5f));
         objects.add(new Keys(walls.get(15),4,0,7,.5f));
         objects.add(new Keys(walls.get(3),11,0,6,.5f));
         objects.add(new Keys(walls.get(1),9,0,4,.5f));
