@@ -1,6 +1,6 @@
 import static org.lwjgl.opengl.GL11.*;
 
-public class zyWall implements Wall {
+public class zyWall implements Wall { //wall parallel to zy-plane
 	
 	private float z,y,posx,posz;
 	private boolean door;
@@ -46,14 +46,14 @@ public class zyWall implements Wall {
 	
 	public void draw() {
 	
-		if(!door){
+		if(!door){//with door
 			glBegin(GL_QUADS);
 			glVertex3f(posx, 0f, posz);
 			glVertex3f(posx, y, posz);
 			glVertex3f(posx, y, posz+z);
 			glVertex3f(posx, 0f, posz+z);
 			}
-			else{
+			else{//without door
 			glBegin(GL_QUADS);
 			glVertex3f(posx, 0f, posz);
 			glVertex3f(posx, y, posz);
@@ -97,7 +97,3 @@ public class zyWall implements Wall {
 		return new Vector(1,0,0);
 	}
 }
-
-
-
-
