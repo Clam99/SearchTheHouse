@@ -22,15 +22,13 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.*;
 
 /**
- * Created by samnoyes on 5/14/15.
+ * Created by Sam Noyes and Jan Stratmann on 5/14/15.
  */
 
 public class TestWalker implements TargetDelegate {
-    boolean isLookingAtOrigin;
     boolean isTesting = false;
     boolean isOver = false;
     private TrueTypeFont font, font2;
-    float MOVE_BY = 0.01f;
     boolean spacePressed = false;
     int WALL_HEIGHT = 3;
     String keyString = "elephant";
@@ -508,7 +506,7 @@ public class TestWalker implements TargetDelegate {
 
             font2.drawString(10, 10, "EscapeTheHouse Version 1.0.0", Color.white);
             font2.drawString(10, 40, "Press <I> for Information");
-            if (Keyboard.isKeyDown(Keyboard.KEY_I)){
+            if (Keyboard.isKeyDown(Keyboard.KEY_I) && !isEnteringString){
                 font2.drawString(10, 70, "Find the crowbar to break out of the mazehouse", Color.white);
                 font2.drawString(10, 100, "To interact with objects, press space.", Color.white);
                 font2.drawString(10, 130, "blue objects are teleports", Color.white);

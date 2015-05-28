@@ -1,5 +1,5 @@
 /**
- * Created by samnoyes on 5/14/15.
+ * Created by Sam Noyes and Jan Stratmann on 5/14/15.
  */
 
 public class Driver {

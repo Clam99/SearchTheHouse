@@ -1,5 +1,5 @@
 /**
- * Created by smurphy on 5/27/15.
+ * Created by Sam Noyes and Jan Stratmann on 5/27/15.
  */
 public class StringTeleporter extends Teleporter {
     String code;

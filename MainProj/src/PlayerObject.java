@@ -1,8 +1,8 @@
-public class PlayerObject {
+public class PlayerObject {//Represents an object that can be interacted with by the user
     private float x, y, z, size;
-    protected boolean wasFound = false;
-    protected boolean isDisplayed = true;
-    public float r,g,b;
+    protected boolean wasFound = false;//Has the user found this yet?
+    protected boolean isDisplayed = true;//Should the object be displayed?
+    public float r,g,b;//color of object
 
     public boolean isDisplayed() {
         return isDisplayed;
@@ -12,7 +12,7 @@ public class PlayerObject {
         x = xp;
         y = yp;
         z = zp;
-        this.size = size;
+        this.size = size;//size of cube that represents the object
         this.r=r;
         this.g=g;
         this.b=b;
@@ -42,7 +42,7 @@ public class PlayerObject {
         this.z = z;
     }
 
-    public boolean isFound() {
+    public boolean isFound() {//If the user has picked up the object
         return wasFound;
     }
 

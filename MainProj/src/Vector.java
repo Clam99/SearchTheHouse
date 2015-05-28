@@ -1,5 +1,5 @@
 /**
- * Created by smurphy on 5/24/15.
+ * Created by Sam Noyes and Jan Stratmann on 5/24/15.
  */
 public class Vector {
     private float x,y,z;
