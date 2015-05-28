@@ -2,9 +2,6 @@
 
 import org.lwjgl.input.Keyboard;
 
-/**
- * Created by samnoyes on 5/20/15.
- */
 public class PlayerLogic {
     private float vx,vy,vz, x,y,z;//coordinates of the player
     private double rotate=Math.PI,viewAngle;
