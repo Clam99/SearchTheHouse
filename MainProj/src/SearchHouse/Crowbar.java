@@ -1,4 +1,6 @@
-public class Crowbar extends PlayerObject {
+package SearchHouse;
+
+public class Crowbar extends PlayerObject {//The crowbar is the last object to find, and once found, the game is over.
     TargetDelegate target;
 
     public Crowbar(float xp, float yp, float zp, float size, TargetDelegate t) {
@@ -9,6 +11,6 @@ public class Crowbar extends PlayerObject {
     public void find(PlayerLogic l) {
         wasFound = true;
         isDisplayed = false;
-        target.receiveAction("end"); //sends info to TestWalker
+        target.receiveAction("end"); //sends info to SearchHouse.TestWalker
     }
 }

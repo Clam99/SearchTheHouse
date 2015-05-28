@@ -1,4 +1,6 @@
-public class Teleporter extends PlayerObject {
+package SearchHouse;
+
+public class Teleporter extends PlayerObject {//Move the player from (xp,y,zp) to (tx, y, tz)
     private float tx,tz;
 
     public Teleporter(float xp, float zp, float tx, float tz, float size) {

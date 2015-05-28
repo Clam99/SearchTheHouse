@@ -1,3 +1,5 @@
+package SearchHouse;
+
 public class PlayerObject {//Represents an object that can be interacted with by the user
     private float x, y, z, size;
     protected boolean wasFound = false;//Has the user found this yet?

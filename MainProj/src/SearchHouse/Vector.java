@@ -1,7 +1,9 @@
+package SearchHouse;
+
 /**
  * Created by Sam Noyes and Jan Stratmann on 5/24/15.
  */
-public class Vector { //since java is not set up to hanle vectors, we made a vector class ourself
+public class Vector { //since java is not set up to handle vectors, we made a vector class ourselves
     private float x,y,z;
     public Vector(float x, float y, float z) {
         this.x = x;
@@ -12,7 +14,7 @@ public class Vector { //since java is not set up to hanle vectors, we made a vec
         return (float)Math.sqrt(x*x+y*y+z*z);
     }
 
-    public Vector projectOnto(Vector v) {
+    public Vector projectOnto(Vector v) {//projects this vector onto v
         return v.scaleVector(dotProduct(v)/(v.getMagnitude()*v.getMagnitude()));
     }
 
@@ -43,7 +45,7 @@ public class Vector { //since java is not set up to hanle vectors, we made a vec
         return "(" + x + ", " + y + ", " + z + ")";
     }
     
-    public void setMagnitude(float mag) {
+    public void setMagnitude(float mag) {//scales the vector so it has the specified magnitude
         scaleVector(mag/getMagnitude());
     }
 }

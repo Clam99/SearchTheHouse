@@ -1,3 +1,5 @@
+package SearchHouse;
+
 /**
  * Created by Sam Noyes and Jan Stratmann on 5/14/15.
  */

@@ -1,4 +1,6 @@
-public interface Wall {
+package SearchHouse;
+
+public interface Wall {//A wall to block the player
 
 	public abstract float getPosX();
 	

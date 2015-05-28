@@ -1,4 +1,6 @@
-public class StringTeleporter extends Teleporter {
+package SearchHouse;
+
+public class StringTeleporter extends Teleporter {//A teleporter that needs a code to be entered in order for it to work
     String code;
     TargetDelegate target;
 

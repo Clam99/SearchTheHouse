@@ -1,3 +1,5 @@
+package SearchHouse;
+
 import static org.lwjgl.opengl.GL11.*;
 
 public class zyWall implements Wall { //wall parallel to zy-plane

@@ -1,13 +1,11 @@
+package SearchHouse;
 
+public class PlayerLogic {//Keeps track of the game's logic
+    private float vx,vy,vz, x,y,z;//coordinates of the player and movement velocities.
+                                  //NOTE:vx if really just the side to side movement and vz is the forward movement.
+                                  //They are not necessarily in the x or z direction since it depends on the user's rotation.
 
-import org.lwjgl.input.Keyboard;
-
-public class PlayerLogic {
-    private float vx,vy,vz, x,y,z;//coordinates of the player
-    private double rotate=Math.PI,viewAngle;
-    private boolean didPrint = false;
-    protected boolean wasFound = false;
-    protected boolean isDisplayed = true;
+    private double rotate=Math.PI,viewAngle;//rotate is the amount that the user is currently rotated about the y axis, and viewAngle is the amount that the user is rotated up and down
 
     public PlayerLogic() {
         y = 1.5f;
@@ -49,7 +47,8 @@ public class PlayerLogic {
         this.y=y;
         this.z=z;
     }
-    public void updatePosition() {
+    public void updatePosition() {//Move the player based on velocities
+        //Calculate how to move the player based on his forward and side to side movement and rotation
         x+=vx*Math.cos(getRotation());
         z-=vx*Math.sin(getRotation());
 
@@ -80,27 +79,13 @@ public class PlayerLogic {
     public void setViewAngle(double v) {
         viewAngle = v;
     }
-    public boolean isLookingAt(float a, float b, float c) {
+    public boolean isLookingAt(float a, float b, float c) {//Check if user is close to and is facing a certain point
         boolean closeEnough = isWithinUnitsOf(3,new Vector(a,b,c),new Vector(x,y,z));
         Vector toObj = new Vector(a,b,c).subtractVector(new Vector(x,y,z));
         boolean isFacing = isWithinUnitsOf(2,   new Vector(x,y,z).addVector(toObj.projectOnto(getFacingVector()))   ,   new Vector(a,b,c));
-
-        if (Keyboard.isKeyDown(Keyboard.KEY_0) && !didPrint) {
-            System.out.println("Current Location: " + new Vector(x,y,z));
-            System.out.println("Object Location: " + new Vector(a,b,c));
-            System.out.println("Vector from camera to object: " + toObj);
-            System.out.println("Looking at vector: " + getFacingVector());
-            System.out.println("Projected vector: " + toObj.projectOnto(getFacingVector()));
-            System.out.println();
-            didPrint = true;
-        }
-        else if (!Keyboard.isKeyDown(Keyboard.KEY_0)) {
-            didPrint = false;
-        }
-
         return isFacing && closeEnough;
     }
-    public boolean isWithinUnitsOf(float units, Vector v, Vector v2) {
+    public boolean isWithinUnitsOf(float units, Vector v, Vector v2) {//The Vectors represent points
         return (v.subtractVector(v2).getMagnitude()<units);
 
     }

@@ -1,4 +1,4 @@
-//imports needed for lwjgl, text display and texture import/display
+package SearchHouse;//imports needed for lwjgl, text display and texture import/display
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
@@ -7,8 +7,6 @@ import org.lwjgl.opengl.DisplayMode;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.lang.annotation.Target;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.awt.Font;
 
@@ -98,13 +96,13 @@ public class TestWalker implements TargetDelegate {
     	
     	//import textures as images
         try {
-            A = TextureLoader.getTexture("PNG", new FileInputStream(new File("/Users/janstratmann/Letter-A.png")));
-            E = TextureLoader.getTexture("PNG", new FileInputStream(new File("/Users/janstratmann/Letter-E.png")));
-            H = TextureLoader.getTexture("PNG", new FileInputStream(new File("/Users/janstratmann/Letter-H.png")));
-            L = TextureLoader.getTexture("PNG", new FileInputStream(new File("/Users/janstratmann/Letter-L.png")));
-            N = TextureLoader.getTexture("PNG", new FileInputStream(new File("/Users/janstratmann/Letter-N.png")));
-            P = TextureLoader.getTexture("PNG", new FileInputStream(new File("/Users/janstratmann/Letter-P.png")));
-            T = TextureLoader.getTexture("PNG", new FileInputStream(new File("/Users/janstratmann/Letter-T.png")));
+            E = TextureLoader.getTexture("PNG", getClass().getResourceAsStream("res/Letter-E.png"));
+            L = TextureLoader.getTexture("PNG", getClass().getResourceAsStream("res/Letter-L.png"));
+            P = TextureLoader.getTexture("PNG", getClass().getResourceAsStream("res/Letter-P.png"));
+            H = TextureLoader.getTexture("PNG", getClass().getResourceAsStream("res/Letter-H.png"));
+            A = TextureLoader.getTexture("PNG", getClass().getResourceAsStream("res/Letter-A.png"));
+            N = TextureLoader.getTexture("PNG", getClass().getResourceAsStream("res/Letter-N.png"));
+            T = TextureLoader.getTexture("PNG", getClass().getResourceAsStream("res/Letter-T.png"));
         } catch (IOException e1) {
             e1.printStackTrace(); 
         }
@@ -197,13 +195,13 @@ public class TestWalker implements TargetDelegate {
                 else if (back && !isEnteringString) l.setVz(-MOVE_BY);
                 else l.setVz(0);
                 if (left) {
-                    l.setRotation(l.getRotation()+.005);
+                    l.setRotation(l.getRotation()+.007);
                 }
                 if (right) {
-                    l.setRotation(l.getRotation()-.005);
+                    l.setRotation(l.getRotation()-.007);
                 }
-                if (up && l.getViewAngle()<45*(Math.PI/180)) l.setViewAngle(l.getViewAngle()+.005);
-                if (down && l.getViewAngle()>-45*(Math.PI/180)) l.setViewAngle(l.getViewAngle()-.005);
+                if (up && l.getViewAngle()<45*(Math.PI/180)) l.setViewAngle(l.getViewAngle()+.007);
+                if (down && l.getViewAngle()>-45*(Math.PI/180)) l.setViewAngle(l.getViewAngle()-.007);
                 
                 //object interaction happens here
                 if (space && !spacePressed) {
@@ -220,7 +218,7 @@ public class TestWalker implements TargetDelegate {
                     spacePressed = false;
                 }
                 
-                //collision detection and glitch prevention
+                //collision detection and glitch prevention - detects if a user is very close to a wall, and moves them back if so
                 for (ArrayList<Wall> house : houses) {
                     for (int i = 0; i < walls.size(); i++) {
                         if (house.get(i).testCollision(l.getX(), l.getZ())) {
@@ -308,7 +306,7 @@ public class TestWalker implements TargetDelegate {
                 TextureImpl.bindNone();
                 Color.white.bind();
                 
-                // everything in the following if-loop is for the StringTeleporter
+                // everything in the following if-loop is for the SearchHouse.StringTeleporter
                 if (isEnteringString) {
                     font2.drawString(10,400,"Enter the 8-character code, or press 0 to exit:  " + enteredString, Color.white);
 
@@ -554,7 +552,7 @@ public class TestWalker implements TargetDelegate {
         
         private void end() {
         	make2D();
-        	font.drawString(10, 360, "You won!! You found the crowbar and can now escape!", Color.white);
+            font.drawString(10, 360, "You won!! You found the crowbar and can now escape!", Color.white);
             font.drawString(400, 440, "Press R to restart", Color.white);
             isOver = true;
         }
@@ -750,7 +748,9 @@ public class TestWalker implements TargetDelegate {
             }
         }
 
-        public void drawLetterOnXYWall(Texture letter ,xyWall wall) { //draw textures
+
+        float letterWidth = WALL_HEIGHT*((float)1/(float)5);
+        public void drawLetterOnXYWall(Texture letter ,xyWall wall) { //draw letter images on walls
 
 
             glBindTexture(GL_TEXTURE_2D, letter.getTextureID());
@@ -758,22 +758,22 @@ public class TestWalker implements TargetDelegate {
             glEnable(GL_TEXTURE_2D);
             glBegin(GL_QUADS);
             glTexCoord2f(0, 0);
-            glVertex3f(wall.getPosX() + wall.getWidth()*((float)4/(float)10), (float)WALL_HEIGHT*((float)6/(float)10), wall.getPosZ()+0.01f);
+            glVertex3f(wall.getPosX() + wall.getWidth()/(float)2-letterWidth/(float)2, (float)WALL_HEIGHT/(float)2+letterWidth/(float)2, wall.getPosZ()+0.01f);
             glTexCoord2f(1, 0);
-            glVertex3f(wall.getPosX() + wall.getWidth()*((float)6/(float)10), (float)WALL_HEIGHT*((float)6/(float)10), wall.getPosZ()+0.01f);
+            glVertex3f(wall.getPosX() + wall.getWidth()/(float)2+letterWidth/(float)2, (float)WALL_HEIGHT/(float)2+letterWidth/(float)2, wall.getPosZ()+0.01f);
             glTexCoord2f(1, 1);
-            glVertex3f(wall.getPosX() + wall.getWidth()*((float)6/(float)10), (float)WALL_HEIGHT*((float)4/(float)10), wall.getPosZ()+0.01f);
+            glVertex3f(wall.getPosX() + wall.getWidth()/(float)2+letterWidth/(float)2, (float)WALL_HEIGHT/(float)2-letterWidth/(float)2, wall.getPosZ()+0.01f);
             glTexCoord2f(0, 1);
-            glVertex3f(wall.getPosX() + wall.getWidth()*((float)4/(float)10), (float)WALL_HEIGHT*((float)4/(float)10), wall.getPosZ()+0.01f);
+            glVertex3f(wall.getPosX() + wall.getWidth()/(float)2-letterWidth/(float)2, (float)WALL_HEIGHT/(float)2-letterWidth/(float)2, wall.getPosZ()+0.01f);
 
             glTexCoord2f(1, 0);
-            glVertex3f(wall.getPosX() + wall.getWidth()*((float)4/(float)10), (float)WALL_HEIGHT*((float)6/(float)10), wall.getPosZ()-0.01f);
+            glVertex3f(wall.getPosX() + wall.getWidth()/(float)2-letterWidth/(float)2, (float)WALL_HEIGHT/(float)2+letterWidth/(float)2, wall.getPosZ()-0.01f);
             glTexCoord2f(0, 0);
-            glVertex3f(wall.getPosX() + wall.getWidth()*((float)6/(float)10), (float)WALL_HEIGHT*((float)6/(float)10), wall.getPosZ()-0.01f);
+            glVertex3f(wall.getPosX() + wall.getWidth()/(float)2+letterWidth/(float)2, (float)WALL_HEIGHT/(float)2+letterWidth/(float)2, wall.getPosZ()-0.01f);
             glTexCoord2f(0, 1);
-            glVertex3f(wall.getPosX() + wall.getWidth()*((float)6/(float)10), (float)WALL_HEIGHT*((float)4/(float)10), wall.getPosZ()-0.01f);
+            glVertex3f(wall.getPosX() + wall.getWidth()/(float)2+letterWidth/(float)2, (float)WALL_HEIGHT/(float)2-letterWidth/(float)2, wall.getPosZ()-0.01f);
             glTexCoord2f(1, 1);
-            glVertex3f(wall.getPosX() + wall.getWidth()*((float)4/(float)10), (float)WALL_HEIGHT*((float)4/(float)10), wall.getPosZ()-0.01f);
+            glVertex3f(wall.getPosX() + wall.getWidth()/(float)2-letterWidth/(float)2, (float)WALL_HEIGHT/(float)2-letterWidth/(float)2, wall.getPosZ()-0.01f);
 
             glEnd();
             //glBindTexture(GL_TEXTURE_2D, 0);
@@ -788,22 +788,22 @@ public class TestWalker implements TargetDelegate {
             glEnable(GL_TEXTURE_2D);
             glBegin(GL_QUADS);
             glTexCoord2f(1, 0);
-            glVertex3f(wall.getPosX()+0.01f, (float)WALL_HEIGHT*((float)6/(float)10), wall.getPosZ() + wall.getWidth()*((float)4/(float)10));
+            glVertex3f(wall.getPosX()+0.01f, (float)WALL_HEIGHT/(float)2+letterWidth/(float)2, wall.getPosZ() + wall.getWidth()/(float)2-letterWidth/(float)2);
             glTexCoord2f(0, 0);
-            glVertex3f(wall.getPosX()+0.01f, (float)WALL_HEIGHT*((float)6/(float)10), wall.getPosZ() + wall.getWidth()*((float)6/(float)10));
+            glVertex3f(wall.getPosX()+0.01f, (float)WALL_HEIGHT/(float)2+letterWidth/(float)2, wall.getPosZ() + wall.getWidth()/(float)2+letterWidth/(float)2);
             glTexCoord2f(0, 1);
-            glVertex3f(wall.getPosX()+0.01f, (float)WALL_HEIGHT*((float)4/(float)10), wall.getPosZ() + wall.getWidth()*((float)6/(float)10));
+            glVertex3f(wall.getPosX()+0.01f, (float)WALL_HEIGHT/(float)2-letterWidth/(float)2, wall.getPosZ() + wall.getWidth()/(float)2+letterWidth/(float)2);
             glTexCoord2f(1, 1);
-            glVertex3f(wall.getPosX()+0.01f, (float)WALL_HEIGHT*((float)4/(float)10), wall.getPosZ() + wall.getWidth()*((float)4/(float)10));
+            glVertex3f(wall.getPosX()+0.01f, (float)WALL_HEIGHT/(float)2-letterWidth/(float)2, wall.getPosZ() + wall.getWidth()/(float)2-letterWidth/(float)2);
 
             glTexCoord2f(0, 0);
-            glVertex3f(wall.getPosX()-0.01f, (float)WALL_HEIGHT*((float)6/(float)10), wall.getPosZ() + wall.getWidth()*((float)4/(float)10));
+            glVertex3f(wall.getPosX()-0.01f, (float)WALL_HEIGHT/(float)2+letterWidth/(float)2, wall.getPosZ() + wall.getWidth()/(float)2-letterWidth/(float)2);
             glTexCoord2f(1, 0);
-            glVertex3f(wall.getPosX()-0.01f, (float)WALL_HEIGHT*((float)6/(float)10), wall.getPosZ() + wall.getWidth()*((float)6/(float)10));
+            glVertex3f(wall.getPosX()-0.01f, (float)WALL_HEIGHT/(float)2+letterWidth/(float)2, wall.getPosZ() + wall.getWidth()/(float)2+letterWidth/(float)2);
             glTexCoord2f(1, 1);
-            glVertex3f(wall.getPosX() - 0.01f, (float)WALL_HEIGHT*((float)4/(float)10), wall.getPosZ() + wall.getWidth()*((float)6/(float)10));
+            glVertex3f(wall.getPosX() - 0.01f, (float)WALL_HEIGHT/(float)2-letterWidth/(float)2, wall.getPosZ() + wall.getWidth()/(float)2+letterWidth/(float)2);
             glTexCoord2f(0, 1);
-            glVertex3f(wall.getPosX() - 0.01f, (float) WALL_HEIGHT * ((float) 4/(float)10), wall.getPosZ() + wall.getWidth()*((float)4/(float)10));
+            glVertex3f(wall.getPosX() - 0.01f, (float) WALL_HEIGHT/(float)2-letterWidth/(float)2, wall.getPosZ() + wall.getWidth()/(float)2-letterWidth/(float)2);
 
             glEnd();
             //glBindTexture(GL_TEXTURE_2D, 0);
