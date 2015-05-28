@@ -42,7 +42,6 @@ public class TestWalker implements TargetDelegate {
     boolean isEnteringString = false;
     boolean backspace = true, a = true,b = true,c = true,d = true,e = true,f = true,g = true,h = true,i = true,j = true,k = true,lb = true,m = true,n = true,o = true,p = true,q = true,r = true,sb = true,t = true,u = true,v = true,w = true,x = true,y = true,z = true;
     StringTeleporter st;
-    TargetDelegate target;
     PlayerLogic l = new PlayerLogic();
     String s = new String();
     Font awtFont;
@@ -117,8 +116,7 @@ public class TestWalker implements TargetDelegate {
         }
     }
 
-    public TestWalker(TargetDelegate t)  {
-        target = t;
+    public TestWalker()  {
         try {
             start();
         }
@@ -556,7 +554,6 @@ public class TestWalker implements TargetDelegate {
                     z = false;
                 }
                 if (Keyboard.isKeyDown(Keyboard.KEY_0)) {
-                    System.out.println("You pressed 0!");
                     isEnteringString = false;
                 }
 
@@ -803,7 +800,6 @@ public class TestWalker implements TargetDelegate {
         else if (passedData.equals("enter string")) {
             beginEntering();
         }
-        System.out.println("Received " + passedData);
     }
 
     public void drawLetterOnXYWall(Texture letter,xyWall wall) { //draw textures
