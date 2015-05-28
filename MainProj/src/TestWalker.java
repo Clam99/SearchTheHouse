@@ -15,6 +15,7 @@ import java.awt.Font;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.opengl.Texture;
+import org.newdawn.slick.opengl.TextureImpl;
 import org.newdawn.slick.opengl.TextureLoader;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -76,7 +77,9 @@ public class TestWalker implements TargetDelegate {
 		
 		Font awtFont2 = new Font("Arial", Font.PLAIN, 30);
 		font2 = new TrueTypeFont(awtFont2, true);
-		
+
+
+
 		final float MOVE_BY = 0.01f;
 		setupHouses(WALL_HEIGHT);
 
@@ -93,6 +96,7 @@ public class TestWalker implements TargetDelegate {
     	objects.add(new Teleporter(29f,33.5f,21f,33.5f,.5f));
     	objects.add(new Teleporter(21f,33.5f,29f,33.5f,.5f));
         objects.add(new Keys(house4.get(42),3,0,3,.5f));
+        objects.add(new Keys(house3.get(7),46,0,2.5f,.5f));
     	objects.add(new Crowbar(37.5f,0,30,1, this));
 
         try {
@@ -103,7 +107,6 @@ public class TestWalker implements TargetDelegate {
             N = TextureLoader.getTexture("PNG", new FileInputStream(new File("MainProj/res/Letter-N.png")));
             P = TextureLoader.getTexture("PNG", new FileInputStream(new File("MainProj/res/Letter-P.png")));
             T = TextureLoader.getTexture("PNG", new FileInputStream(new File("MainProj/res/Letter-T.png")));
-            System.out.println("Made the texture");
         } catch (IOException e1) {
             e1.printStackTrace();
         }
@@ -172,52 +175,76 @@ public class TestWalker implements TargetDelegate {
             for (ArrayList<Wall> house : houses) {
                 for (int i = 0; i < walls.size(); i++) {
                     if (house.get(i).testCollision(l.getX(), l.getZ())) {
-                        if (moveRight) l.setVx(l.getVx() + .1f);
+                        Wall w = house.get(i);
+                        if (w.getSurfaceVector().getZ() ==1) {
+                            if (l.getX()>w.getPosX()) {
+                                l.setX(w.getPosX()+.2f);
+                            }
+                            else {
+                                l.setX(w.getPosX()-.2f);
+                            }
+                        }
+                        if (w.getSurfaceVector().getX() ==1) {
+                            if (l.getZ()>w.getPosZ()) {
+                                l.setZ(w.getPosZ()+.2f);
+                            }
+                            else {
+                                l.setZ(w.getPosZ()-.2f);
+                            }
+                        }
+
+                        /*if (moveRight) l.setVx(l.getVx() + .1f);
                         if (moveLeft) l.setVx(l.getVx() - .1f);
                         if (forward) l.setVz(l.getVz() - .1f);
-                        if (back) l.setVz(l.getVz() + .1f);
-                    /*Vector currentMovement = new Vector(l.getVx()*(float)Math.cos(l.getRotation())+l.getVz()*(float)Math.sin(l.getRotation()),0,l.getVz()*(float)Math.cos(l.getRotation())-l.getVx()*(float)Math.sin(l.getRotation()));
-                    Vector projection = currentMovement.projectOnto(wall.getSurfaceVector());
-                    Vector moveBack = currentMovement.projectOnto(wall.getNormalVector()).scaleVector(-1);
-                    moveBack.setMagnitude(0.1f);
-                    Vector newPosition = moveBack.addVector(new Vector(l.getX(),l.getY(),l.getZ()));
-                    //l.setX(newPosition.getX());
-                    //l.setY(newPosition.getY());
-                    //l.setZ(newPosition.getZ());
-                    System.out.println("Current movement: " + currentMovement);
-                    System.out.println("Wall: " + wall.getSurfaceVector());
-                    System.out.println(projection);
-                    if (wall.getSurfaceVector().getX()==1) {
-                        l.setVx(projection.getMagnitude()*(float)Math.cos(l.getRotation()));
-                        l.setVz(projection.getMagnitude()*(float)Math.sin(l.getRotation()));
-                    }
-                    else {
-                        l.setVz(projection.getMagnitude()*(float)Math.cos(l.getRotation()));
-                        l.setVx(projection.getMagnitude()*(float)Math.sin(l.getRotation()));
-                    }
-                    /*if (wall.getSurfaceVector().getX() == 1) {
-                        if (l.getVx() > 0) {
-                            l.setRotation(-3.14159/2);
+                        if (back) l.setVz(l.getVz() + .1f);*/
 
-                            System.out.println("90");
+
+                        //************************************************************************
+
+
+
+                        /*Vector currentMovement = new Vector(l.getVx()*(float)Math.cos(l.getRotation())+l.getVz()*(float)Math.sin(l.getRotation()),0,l.getVz()*(float)Math.cos(l.getRotation())-l.getVx()*(float)Math.sin(l.getRotation()));
+                        Vector projection = currentMovement.projectOnto(wall.getSurfaceVector());
+                        Vector moveBack = currentMovement.projectOnto(wall.getNormalVector()).scaleVector(-1);
+                        moveBack.setMagnitude(0.1f);
+                        Vector newPosition = moveBack.addVector(new Vector(l.getX(),l.getY(),l.getZ()));
+                        //l.setX(newPosition.getX());
+                        //l.setY(newPosition.getY());
+                        //l.setZ(newPosition.getZ());
+                        System.out.println("Current movement: " + currentMovement);
+                        System.out.println("Wall: " + wall.getSurfaceVector());
+                        System.out.println(projection);
+                        if (wall.getSurfaceVector().getX()==1) {
+                            l.setVx(projection.getMagnitude()*(float)Math.cos(l.getRotation()));
+                            l.setVz(projection.getMagnitude()*(float)Math.sin(l.getRotation()));
                         }
                         else {
-                            l.setRotation(3.14159/2);
-
-                            System.out.println("-90");
+                            l.setVz(projection.getMagnitude()*(float)Math.cos(l.getRotation()));
+                            l.setVx(projection.getMagnitude()*(float)Math.sin(l.getRotation()));
                         }
+                        /*if (wall.getSurfaceVector().getX() == 1) {
+                            if (l.getVx() > 0) {
+                                l.setRotation(-3.14159/2);
 
-                    }
-                    else {
-                        if (l.getVz() > 0) {
-                            l.setRotation(0);
-                            System.out.println("0");
+                                System.out.println("90");
+                            }
+                            else {
+                                l.setRotation(3.14159/2);
+
+                                System.out.println("-90");
+                            }
+
                         }
                         else {
-                            l.setRotation(3.14159);
-                            System.out.println("180");
-                        }
-                    }*/
+                            if (l.getVz() > 0) {
+                                l.setRotation(0);
+                                System.out.println("0");
+                            }
+                            else {
+                                l.setRotation(3.14159);
+                                System.out.println("180");
+                            }
+                        }*/
                     }
                 }
             }
@@ -272,9 +299,11 @@ public class TestWalker implements TargetDelegate {
             }
 
             make2D();
+            glEnable(GL_TEXTURE_2D);
+            TextureImpl.bindNone();
             Color.white.bind();
             if (isEnteringString) {
-                font2.drawString(10,400,"Enter the 8-character code, or press 0 to exit:" + enteredString,new Color(1,1,1));
+                font2.drawString(10,400,"Enter the 8-character code, or press 0 to exit:  " + enteredString, Color.white);
 
                 if (Keyboard.isKeyDown(Keyboard.KEY_A) && !a) {
                     enteredString+="A";
@@ -284,188 +313,188 @@ public class TestWalker implements TargetDelegate {
                     a = false;
                 }
                 if (Keyboard.isKeyDown(Keyboard.KEY_BACK) && enteredString.length()>0 && !backspace) {
-                    enteredString = enteredString.substring(0,enteredString.length()-2);
+                    enteredString = enteredString.substring(0,enteredString.length()-1);
                     backspace = true;
                 }
                 else if (!Keyboard.isKeyDown(Keyboard.KEY_BACK)) {
                     backspace = false;
                 }
-                 if (Keyboard.isKeyDown(Keyboard.KEY_B) && !b) {
+                if (Keyboard.isKeyDown(Keyboard.KEY_B) && !b) {
                     enteredString+="B";
                     b = true;
                 }
                 else if (!Keyboard.isKeyDown(Keyboard.KEY_B)) {
                     b = false;
                 }
-                 if (Keyboard.isKeyDown(Keyboard.KEY_C) && !c) {
+                if (Keyboard.isKeyDown(Keyboard.KEY_C) && !c) {
                     enteredString+="C";
                     c = true;
                 }
                 else if (!Keyboard.isKeyDown(Keyboard.KEY_C)) {
                     c = false;
                 }
-                 if (Keyboard.isKeyDown(Keyboard.KEY_D) && !d) {
+                if (Keyboard.isKeyDown(Keyboard.KEY_D) && !d) {
                     enteredString+="D";
                     d = true;
                 }
                 else if (!Keyboard.isKeyDown(Keyboard.KEY_D)) {
                     d = false;
                 }
-                 if (Keyboard.isKeyDown(Keyboard.KEY_E) && !e) {
+                if (Keyboard.isKeyDown(Keyboard.KEY_E) && !e) {
                     enteredString+="E";
                     e = true;
                 }
                 else if (!Keyboard.isKeyDown(Keyboard.KEY_E)) {
                     e = false;
                 }
-                 if (Keyboard.isKeyDown(Keyboard.KEY_F) && !f) {
+                if (Keyboard.isKeyDown(Keyboard.KEY_F) && !f) {
                     enteredString+="F";
                     f = true;
                 }
                 else if (!Keyboard.isKeyDown(Keyboard.KEY_F)) {
                     f = false;
                 }
-                 if (Keyboard.isKeyDown(Keyboard.KEY_G) && !g) {
+                if (Keyboard.isKeyDown(Keyboard.KEY_G) && !g) {
                     enteredString+="G";
                     g = true;
                 }
                 else if (!Keyboard.isKeyDown(Keyboard.KEY_G)) {
                     g = false;
                 }
-                 if (Keyboard.isKeyDown(Keyboard.KEY_H) && !h) {
+                if (Keyboard.isKeyDown(Keyboard.KEY_H) && !h) {
                     enteredString+="H";
                     h = true;
                 }
                 else if (!Keyboard.isKeyDown(Keyboard.KEY_H)) {
                     h = false;
                 }
-                 if (Keyboard.isKeyDown(Keyboard.KEY_I) && !i) {
+                if (Keyboard.isKeyDown(Keyboard.KEY_I) && !i) {
                     enteredString+="I";
                     i = true;
                 }
                 else if (!Keyboard.isKeyDown(Keyboard.KEY_I)) {
                     i = false;
                 }
-                 if (Keyboard.isKeyDown(Keyboard.KEY_J) && !j) {
+                if (Keyboard.isKeyDown(Keyboard.KEY_J) && !j) {
                     enteredString+="J";
                     j = true;
                 }
                 else if (!Keyboard.isKeyDown(Keyboard.KEY_J)) {
                     j = false;
                 }
-                 if (Keyboard.isKeyDown(Keyboard.KEY_K) && !k) {
+                if (Keyboard.isKeyDown(Keyboard.KEY_K) && !k) {
                     enteredString+="K";
                     k = true;
                 }
                 else if (!Keyboard.isKeyDown(Keyboard.KEY_K)) {
                     k = false;
                 }
-                 if (Keyboard.isKeyDown(Keyboard.KEY_L) && !lb) {
+                if (Keyboard.isKeyDown(Keyboard.KEY_L) && !lb) {
                     enteredString+="L";
                     lb = true;
                 }
                 else if (!Keyboard.isKeyDown(Keyboard.KEY_L)) {
                     lb = false;
                 }
-                 if (Keyboard.isKeyDown(Keyboard.KEY_M) && !m) {
+                if (Keyboard.isKeyDown(Keyboard.KEY_M) && !m) {
                     enteredString+="M";
                     m = true;
                 }
                 else if (!Keyboard.isKeyDown(Keyboard.KEY_M)) {
                     m = false;
                 }
-                 if (Keyboard.isKeyDown(Keyboard.KEY_N) && !n) {
+                if (Keyboard.isKeyDown(Keyboard.KEY_N) && !n) {
                     enteredString+="N";
                     n = true;
                 }
                 else if (!Keyboard.isKeyDown(Keyboard.KEY_N)) {
                     n = false;
                 }
-                 if (Keyboard.isKeyDown(Keyboard.KEY_O) && !o) {
+                if (Keyboard.isKeyDown(Keyboard.KEY_O) && !o) {
                     enteredString+="O";
                     o=true;
                 }
                 else if (!Keyboard.isKeyDown(Keyboard.KEY_O)) {
                     o = false;
                 }
-                 if (Keyboard.isKeyDown(Keyboard.KEY_P) && !p) {
+                if (Keyboard.isKeyDown(Keyboard.KEY_P) && !p) {
                     enteredString+="P";
                     p = true;
                 }
                 else if (!Keyboard.isKeyDown(Keyboard.KEY_P)) {
                     p = false;
                 }
-                 if (Keyboard.isKeyDown(Keyboard.KEY_Q) && !q) {
+                if (Keyboard.isKeyDown(Keyboard.KEY_Q) && !q) {
                     enteredString+="Q";
                     q = true;
                 }
                 else if (!Keyboard.isKeyDown(Keyboard.KEY_Q)) {
                     q = false;
                 }
-                 if (Keyboard.isKeyDown(Keyboard.KEY_R) && !r) {
+                if (Keyboard.isKeyDown(Keyboard.KEY_R) && !r) {
                     enteredString+="R";
                     r = true;
                 }
                 else if (!Keyboard.isKeyDown(Keyboard.KEY_R)) {
                     r = false;
                 }
-                 if (Keyboard.isKeyDown(Keyboard.KEY_S) && !sb) {
+                if (Keyboard.isKeyDown(Keyboard.KEY_S) && !sb) {
                     enteredString+="S";
                     sb = true;
                 }
                 else if (!Keyboard.isKeyDown(Keyboard.KEY_S)) {
                     sb = false;
                 }
-                 if (Keyboard.isKeyDown(Keyboard.KEY_T) && !t) {
+                if (Keyboard.isKeyDown(Keyboard.KEY_T) && !t) {
                     enteredString+="T";
                     t = true;
                 }
                 else if (!Keyboard.isKeyDown(Keyboard.KEY_T)) {
                     t = false;
                 }
-                 if (Keyboard.isKeyDown(Keyboard.KEY_U) && !u) {
+                if (Keyboard.isKeyDown(Keyboard.KEY_U) && !u) {
                     enteredString+="U";
                     u = true;
                 }
                 else if (!Keyboard.isKeyDown(Keyboard.KEY_U)) {
                     u = false;
                 }
-                 if (Keyboard.isKeyDown(Keyboard.KEY_V) && !v) {
+                if (Keyboard.isKeyDown(Keyboard.KEY_V) && !v) {
                     enteredString+="V";
                     v = true;
                 }
                 else if (!Keyboard.isKeyDown(Keyboard.KEY_V)) {
                     v = false;
                 }
-                 if (Keyboard.isKeyDown(Keyboard.KEY_W) && !w) {
+                if (Keyboard.isKeyDown(Keyboard.KEY_W) && !w) {
                     enteredString+="W";
                     w = true;
                 }
                 else if (!Keyboard.isKeyDown(Keyboard.KEY_W)) {
                     w = false;
                 }
-                 if (Keyboard.isKeyDown(Keyboard.KEY_X) && !x) {
+                if (Keyboard.isKeyDown(Keyboard.KEY_X) && !x) {
                     enteredString+="X";
                     x = true;
                 }
                 else if (!Keyboard.isKeyDown(Keyboard.KEY_X)) {
                     x = false;
                 }
-                 if (Keyboard.isKeyDown(Keyboard.KEY_Y) && !y) {
+                if (Keyboard.isKeyDown(Keyboard.KEY_Y) && !y) {
                     enteredString+="Y";
                     y = true;
                 }
                 else if (!Keyboard.isKeyDown(Keyboard.KEY_Y)) {
                     y = false;
                 }
-                 if (Keyboard.isKeyDown(Keyboard.KEY_Z) && !z) {
+                if (Keyboard.isKeyDown(Keyboard.KEY_Z) && !z) {
                     enteredString+="Z";
                     z = true;
                 }
                 else if (!Keyboard.isKeyDown(Keyboard.KEY_Z)) {
                     z = false;
                 }
-                 if (Keyboard.isKeyDown(Keyboard.KEY_0)) {
+                if (Keyboard.isKeyDown(Keyboard.KEY_0)) {
                     System.out.println("You pressed 0!");
                     isEnteringString = false;
                 }
@@ -480,13 +509,14 @@ public class TestWalker implements TargetDelegate {
             font2.drawString(10, 10, "EscapeTheHouse Version 1.0.0", Color.white);
             font2.drawString(10, 40, "Press <I> for Information");
             if (Keyboard.isKeyDown(Keyboard.KEY_I)){
-            	font2.drawString(10, 70, "Find the crowbar to break out of the mazehouse", Color.white);
-            	font2.drawString(10, 100, "To interact with objects, press space.", Color.white);
-            	font2.drawString(10, 130, "blue objects are teleports", Color.white);
-            	font2.drawString(10, 160, "yellow objects are collectables", Color.white);
+                font2.drawString(10, 70, "Find the crowbar to break out of the mazehouse", Color.white);
+                font2.drawString(10, 100, "To interact with objects, press space.", Color.white);
+                font2.drawString(10, 130, "blue objects are teleports", Color.white);
+                font2.drawString(10, 160, "yellow objects are collectibles", Color.white);
             }
             glDisable(GL_BLEND);
-
+            //updateGLU(l);
+            glDisable(GL_TEXTURE_2D);
             Display.update();
         }
         Display.destroy();
@@ -644,7 +674,6 @@ public class TestWalker implements TargetDelegate {
 	    house2.get(15).open();
 	    house2.get(17).open();
 	    house2.get(18).open();
-	    house2.get(20).open();
 	    house2.get(22).open();
 	    house2.get(23).open();
 	    house2.get(25).open();
@@ -720,25 +749,26 @@ public class TestWalker implements TargetDelegate {
 
         glEnable(GL_TEXTURE_2D);
         glBegin(GL_QUADS);
-        glTexCoord2f(0, 0);
-        glVertex3f(wall.getPosX(), WALL_HEIGHT, wall.getPosZ()+0.1f);
         glTexCoord2f(1, 0);
-        glVertex3f(wall.getPosX() + wall.getWidth(), WALL_HEIGHT, wall.getPosZ()+0.1f);
-        glTexCoord2f(1, 1);
-        glVertex3f(wall.getPosX() + wall.getWidth(), (float)WALL_HEIGHT*((float)8/(float)10), wall.getPosZ()+0.1f);
+        glVertex3f(wall.getPosX(), WALL_HEIGHT, wall.getPosZ()+0.01f);
+        glTexCoord2f(0, 0);
+        glVertex3f(wall.getPosX() + wall.getWidth()/10, WALL_HEIGHT, wall.getPosZ()+0.01f);
         glTexCoord2f(0, 1);
-        glVertex3f(wall.getPosX(), (float)WALL_HEIGHT*((float)8/(float)10), wall.getPosZ()+0.1f);
+        glVertex3f(wall.getPosX() + wall.getWidth()/10, (float)WALL_HEIGHT*((float)8/(float)10), wall.getPosZ()+0.01f);
+        glTexCoord2f(1, 1);
+        glVertex3f(wall.getPosX(), (float)WALL_HEIGHT*((float)8/(float)10), wall.getPosZ()+0.01f);
 
-        glTexCoord2f(0, 0);
-        glVertex3f(wall.getPosX(), WALL_HEIGHT, wall.getPosZ()-0.1f);
         glTexCoord2f(1, 0);
-        glVertex3f(wall.getPosX() + wall.getWidth()/10, WALL_HEIGHT, wall.getPosZ()-0.1f);
-        glTexCoord2f(1, 1);
-        glVertex3f(wall.getPosX() + wall.getWidth()/10, (float)WALL_HEIGHT*((float)8/(float)10), wall.getPosZ()-0.1f);
+        glVertex3f(wall.getPosX(), WALL_HEIGHT, wall.getPosZ()-0.01f);
+        glTexCoord2f(0, 0);
+        glVertex3f(wall.getPosX() + wall.getWidth()/10, WALL_HEIGHT, wall.getPosZ()-0.01f);
         glTexCoord2f(0, 1);
-        glVertex3f(wall.getPosX(), (float)WALL_HEIGHT*((float)8/(float)10), wall.getPosZ()-0.1f);
+        glVertex3f(wall.getPosX() + wall.getWidth()/10, (float)WALL_HEIGHT*((float)8/(float)10), wall.getPosZ()-0.01f);
+        glTexCoord2f(1, 1);
+        glVertex3f(wall.getPosX(), (float)WALL_HEIGHT*((float)8/(float)10), wall.getPosZ()-0.01f);
 
         glEnd();
+        //glBindTexture(GL_TEXTURE_2D, 0);
         glDisable(GL_TEXTURE_2D);
     }
 
@@ -749,25 +779,26 @@ public class TestWalker implements TargetDelegate {
 
         glEnable(GL_TEXTURE_2D);
         glBegin(GL_QUADS);
-        glTexCoord2f(0, 0);
-        glVertex3f(wall.getPosX()+0.1f, WALL_HEIGHT, wall.getPosZ());
         glTexCoord2f(1, 0);
-        glVertex3f(wall.getPosX()+0.1f, WALL_HEIGHT, wall.getPosZ() + wall.getWidth());
-        glTexCoord2f(1, 1);
-        glVertex3f(wall.getPosX()+0.1f, (float)WALL_HEIGHT*((float)8/(float)10), wall.getPosZ() + wall.getWidth());
+        glVertex3f(wall.getPosX()+0.01f, WALL_HEIGHT, wall.getPosZ());
+        glTexCoord2f(0, 0);
+        glVertex3f(wall.getPosX()+0.01f, WALL_HEIGHT, wall.getPosZ() + wall.getWidth()/10);
         glTexCoord2f(0, 1);
-        glVertex3f(wall.getPosX()+0.1f, (float)WALL_HEIGHT*((float)8/(float)10), wall.getPosZ());
+        glVertex3f(wall.getPosX()+0.01f, (float)WALL_HEIGHT*((float)8/(float)10), wall.getPosZ() + wall.getWidth()/10);
+        glTexCoord2f(1, 1);
+        glVertex3f(wall.getPosX()+0.01f, (float)WALL_HEIGHT*((float)8/(float)10), wall.getPosZ());
 
-        glTexCoord2f(0, 0);
-        glVertex3f(wall.getPosX()-0.1f, WALL_HEIGHT, wall.getPosZ());
         glTexCoord2f(1, 0);
-        glVertex3f(wall.getPosX()-0.1f, WALL_HEIGHT, wall.getPosZ() + wall.getWidth()/10);
-        glTexCoord2f(1, 1);
-        glVertex3f(wall.getPosX() - 0.1f, (float)WALL_HEIGHT*((float)8/(float)10), wall.getPosZ() + wall.getWidth()/10);
+        glVertex3f(wall.getPosX()-0.01f, WALL_HEIGHT, wall.getPosZ());
+        glTexCoord2f(0, 0);
+        glVertex3f(wall.getPosX()-0.01f, WALL_HEIGHT, wall.getPosZ() + wall.getWidth()/10);
         glTexCoord2f(0, 1);
-        glVertex3f(wall.getPosX()-0.1f, (float)WALL_HEIGHT*((float)8/(float)10), wall.getPosZ());
+        glVertex3f(wall.getPosX() - 0.01f, (float)WALL_HEIGHT*((float)8/(float)10), wall.getPosZ() + wall.getWidth()/10);
+        glTexCoord2f(1, 1);
+        glVertex3f(wall.getPosX()-0.01f, (float)WALL_HEIGHT*((float)8/(float)10), wall.getPosZ());
 
         glEnd();
+        //glBindTexture(GL_TEXTURE_2D, 0);
         glDisable(GL_TEXTURE_2D);
     }
 }
