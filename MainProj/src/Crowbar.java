@@ -9,6 +9,6 @@ public class Crowbar extends PlayerObject {
     public void find(PlayerLogic l) {
         wasFound = true;
         isDisplayed = false;
-        target.receiveAction("end");
+        target.receiveAction("end"); //sends info to TestWalker
     }
 }
