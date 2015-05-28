@@ -1,4 +1,4 @@
-package lwgl2;
+
 
 import org.lwjgl.input.Keyboard;
 
@@ -107,7 +107,7 @@ public class PlayerLogic {
         return (v.subtractVector(v2).getMagnitude()<units);
 
     }
-    public Vector getFacingVector() {//this definitely works
+    public Vector getFacingVector() {//get vector of where the user is facing
         return new Vector((float)Math.sin(getRotation()),(float)Math.tan(getViewAngle()),(float)Math.cos(getRotation()));
 
     }

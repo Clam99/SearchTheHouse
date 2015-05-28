@@ -7,10 +7,17 @@ public class Teleporter extends PlayerObject {
         this.tz = tz;
     }
 
-    public boolean find(PlayerLogic l) {
+    public void find(PlayerLogic l) {
         //super.find(l);
         l.setX(tx);
         l.setZ(tz);
-        return false;
+    }
+
+    public float getTx() {
+        return tx;
+    }
+
+    public float getTz() {
+        return tz;
     }
 }

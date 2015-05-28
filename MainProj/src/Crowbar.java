@@ -1,11 +1,14 @@
 public class Crowbar extends PlayerObject {
-    public Crowbar(float xp, float yp, float zp, float size) {
+    TargetDelegate target;
+
+    public Crowbar(float xp, float yp, float zp, float size, TargetDelegate t) {
         super(xp,yp,zp,0,0,0,size);
+        target = t;
     }
     
-    public boolean find(PlayerLogic l) {
+    public void find(PlayerLogic l) {
         wasFound = true;
         isDisplayed = false;
-        return true;
+        target.receiveAction("end");
     }
 }

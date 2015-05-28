@@ -7,9 +7,8 @@ public class Keys extends DisappearingObject {
         this.wall.close();
     }
 
-    public boolean find(PlayerLogic l) {
+    public void find(PlayerLogic l) {
         super.find(l);
         wall.open();
-        return false;
     }
 }
