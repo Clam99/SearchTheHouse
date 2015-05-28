@@ -26,7 +26,7 @@ import static org.lwjgl.util.glu.GLU.*;
 
 public class TestWalker implements TargetDelegate {
     boolean isLookingAtOrigin;
-    boolean isTesting = true;
+    boolean isTesting = false;
     boolean isOver = false;
     private TrueTypeFont font, font2;
     float MOVE_BY = 0.01f;
