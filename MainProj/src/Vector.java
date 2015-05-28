@@ -1,7 +1,7 @@
 /**
  * Created by Sam Noyes and Jan Stratmann on 5/24/15.
  */
-public class Vector {
+public class Vector { //since java is not set up to hanle vectors, we made a vector class ourself
     private float x,y,z;
     public Vector(float x, float y, float z) {
         this.x = x;
@@ -42,6 +42,7 @@ public class Vector {
     public String toString() {
         return "(" + x + ", " + y + ", " + z + ")";
     }
+    
     public void setMagnitude(float mag) {
         scaleVector(mag/getMagnitude());
     }
