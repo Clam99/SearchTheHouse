@@ -4,9 +4,9 @@ public interface Wall {
 	
 	public abstract float getPosZ();
 	
-	public abstract void addX(float x);
+	public abstract void addX(float x);//translate wall
 	
-	public abstract void addZ(float z);
+	public abstract void addZ(float z);//translate wall
 	
 	public abstract float getWidth();
 	
@@ -16,14 +16,14 @@ public interface Wall {
 	
 	public abstract Vector getNormalVector();
 	
-	public abstract void open();
+	public abstract void open(); //wall has a open door(-frame) now
 	
-	public abstract void close();
+	public abstract void close(); //wall doesn't have an opening now
 
-	public abstract void draw();
+	public abstract void draw(); //draw wall
 	
-	public abstract Wall copy();
+	public abstract Wall copy(); //make new wall with same parameters
 	
-	public abstract boolean testCollision(float x, float z);
+	public abstract boolean testCollision(float x, float z); //tests collisions
 
 }
