@@ -7,6 +7,8 @@ import org.lwjgl.opengl.DisplayMode;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.annotation.Target;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.awt.Font;
 
@@ -38,10 +40,85 @@ public class TestWalker implements TargetDelegate {
     ArrayList<Wall> house4 = new ArrayList<Wall>(48);
     Texture E,L,P,H,A,N,T;
     boolean isEnteringString = false;
-    boolean backspace = false, a = false,b = false,c = false,d = false,e = false,f = false,g = false,h = false,i = false,j = false,k = false,lb = false,m = false,n = false,o = false,p = false,q = false,r = false,sb = false,t = false,u = false,v = false,w = false,x = false,y = false,z = false;
+    boolean backspace = true, a = true,b = true,c = true,d = true,e = true,f = true,g = true,h = true,i = true,j = true,k = true,lb = true,m = true,n = true,o = true,p = true,q = true,r = true,sb = true,t = true,u = true,v = true,w = true,x = true,y = true,z = true;
     StringTeleporter st;
+    TargetDelegate target;
+    PlayerLogic l = new PlayerLogic();
+    String s = new String();
+    Font awtFont;
 
-    public TestWalker()  {
+    Font awtFont2;
+    ArrayList<PlayerObject> objects;
+
+    public void setup() {
+        isOver = false;
+        TrueTypeFont font, font2;
+        spacePressed = false;
+        WALL_HEIGHT = 3;
+        keyString = "elephant";
+        enteredString = "";
+        walls = new ArrayList<Wall>(48);
+        house1 = new ArrayList<Wall>(48);
+        house2 = new ArrayList<Wall>(48);
+        house3 = new ArrayList<Wall>(48);
+        house4 = new ArrayList<Wall>(48);
+         isEnteringString = false;
+        backspace = true; a = true;b = true;c = true;d = true;e = true;f = true;g = true;h = true;i = true;j = true;k = true;lb = true;m = true;n = true;o = true;p = true;q = true;r = true;sb = true;t = true;u = true;v = true;w = true;x = true;y = true;z = true;
+        l = new PlayerLogic();
+        s = new String();
+        try {
+            Display.setDisplayMode(new DisplayMode(1200, 800));
+        } catch (LWJGLException e1) {
+            e1.printStackTrace();
+        }
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glMatrixMode(GL_PROJECTION);
+        gluPerspective(70f, 1.5f, -1000f, 1000f);
+        gluLookAt(0,0,10,12.5f,1.5f,0,0,1,0);
+        glEnable(GL_DEPTH_TEST);
+
+        awtFont = new Font("Times New Roman", Font.BOLD, 50);
+        font = new TrueTypeFont(awtFont, true);
+
+        awtFont2 = new Font("Arial", Font.PLAIN, 30);
+        font2 = new TrueTypeFont(awtFont2, true);
+
+
+
+        final float MOVE_BY = 0.01f;
+        setupHouses(WALL_HEIGHT);
+
+        st = new StringTeleporter(29f,23,21f,23f,.5f,keyString, this);
+        objects = new ArrayList<PlayerObject>();
+        objects.add(new Teleporter(33.5f,7.5f,8.5f,11,.5f));
+        objects.add(new Teleporter(8.5f,11,33.5f,7.5f,.5f));
+        objects.add(new Teleporter(37.5f,4,37.5f,11f,.5f));
+        objects.add(new Teleporter(37.5f,11,37.5f,4f,.5f));
+        objects.add(new Teleporter(16.5f,11,41.5f,30f,.5f));
+        objects.add(new Teleporter(41.5f,30,16.5f,11f,.5f));
+        objects.add(st);
+        objects.add(new Teleporter(21f,23,29f,23f,.5f));
+        objects.add(new Teleporter(29f,33.5f,21f,33.5f,.5f));
+        objects.add(new Teleporter(21f,33.5f,29f,33.5f,.5f));
+        objects.add(new Keys(house4.get(42),3,0,3,.5f));
+        objects.add(new Keys(house3.get(7),46,0,2.5f,.5f));
+        objects.add(new Crowbar(37.5f,0,30,1, this));
+
+        try {
+            A = TextureLoader.getTexture("PNG", new FileInputStream(new File("MainProj/res/Letter-A.png")));
+            E = TextureLoader.getTexture("PNG", new FileInputStream(new File("MainProj/res/Letter-E.png")));
+            H = TextureLoader.getTexture("PNG", new FileInputStream(new File("MainProj/res/Letter-H.png")));
+            L = TextureLoader.getTexture("PNG", new FileInputStream(new File("MainProj/res/Letter-L.png")));
+            N = TextureLoader.getTexture("PNG", new FileInputStream(new File("MainProj/res/Letter-N.png")));
+            P = TextureLoader.getTexture("PNG", new FileInputStream(new File("MainProj/res/Letter-P.png")));
+            T = TextureLoader.getTexture("PNG", new FileInputStream(new File("MainProj/res/Letter-T.png")));
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+    }
+
+    public TestWalker(TargetDelegate t)  {
+        target = t;
         try {
             start();
         }
@@ -52,7 +129,6 @@ public class TestWalker implements TargetDelegate {
         
     public void start() throws org.lwjgl.LWJGLException {
     	//set up opengl
-        PlayerLogic l = new PlayerLogic();
         Display.setDisplayMode(new DisplayMode(1200, 800));
         Display.create();
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -62,10 +138,10 @@ public class TestWalker implements TargetDelegate {
         glEnable(GL_DEPTH_TEST);
     	
         //set up the fonts for HUD text
-    	Font awtFont = new Font("Times New Roman", Font.BOLD, 50);
+        awtFont = new Font("Times New Roman", Font.BOLD, 50);
 		font = new TrueTypeFont(awtFont, true);
 		
-		Font awtFont2 = new Font("Arial", Font.PLAIN, 30);
+        awtFont2 = new Font("Arial", Font.PLAIN, 30);
 		font2 = new TrueTypeFont(awtFont2, true);
 
 
@@ -75,7 +151,7 @@ public class TestWalker implements TargetDelegate {
 		
 		//add objects into map (StringTeleporter is a Teleporter with password
 		st = new StringTeleporter(29f,23,21f,23f,.5f,keyString, this);
-    	ArrayList<PlayerObject> objects = new ArrayList<PlayerObject>();
+    	objects = new ArrayList<PlayerObject>();
     	objects.add(new Teleporter(33.5f,7.5f,8.5f,11,.5f));
     	objects.add(new Teleporter(8.5f,11,33.5f,7.5f,.5f));
     	objects.add(new Teleporter(37.5f,4,37.5f,11f,.5f));
@@ -92,13 +168,13 @@ public class TestWalker implements TargetDelegate {
     	
     	//import textures as images
         try {
-            A = TextureLoader.getTexture("PNG", new FileInputStream(new File("/Users/janstratmann/Letter-A.png")));
-            E = TextureLoader.getTexture("PNG", new FileInputStream(new File("/Users/janstratmann/Letter-E.png")));
-            H = TextureLoader.getTexture("PNG", new FileInputStream(new File("/Users/janstratmann/Letter-H.png")));
-            L = TextureLoader.getTexture("PNG", new FileInputStream(new File("/Users/janstratmann/Letter-L.png")));
-            N = TextureLoader.getTexture("PNG", new FileInputStream(new File("/Users/janstratmann/Letter-N.png")));
-            P = TextureLoader.getTexture("PNG", new FileInputStream(new File("/Users/janstratmann/Letter-P.png")));
-            T = TextureLoader.getTexture("PNG", new FileInputStream(new File("/Users/janstratmann/Letter-T.png")));
+            A = TextureLoader.getTexture("PNG", new FileInputStream(new File("MainProj/res/Letter-A.png")));
+            E = TextureLoader.getTexture("PNG", new FileInputStream(new File("MainProj/res/Letter-E.png")));
+            H = TextureLoader.getTexture("PNG", new FileInputStream(new File("MainProj/res/Letter-H.png")));
+            L = TextureLoader.getTexture("PNG", new FileInputStream(new File("MainProj/res/Letter-L.png")));
+            N = TextureLoader.getTexture("PNG", new FileInputStream(new File("MainProj/res/Letter-N.png")));
+            P = TextureLoader.getTexture("PNG", new FileInputStream(new File("MainProj/res/Letter-P.png")));
+            T = TextureLoader.getTexture("PNG", new FileInputStream(new File("MainProj/res/Letter-T.png")));
         } catch (IOException e1) {
             e1.printStackTrace();
         }
@@ -128,6 +204,34 @@ public class TestWalker implements TargetDelegate {
             }
             
             //get keyboard inputs
+
+
+            if (Keyboard.isKeyDown(Keyboard.KEY_W) && !w  && !isEnteringString) {
+                w = true;
+            }
+            else if (!Keyboard.isKeyDown(Keyboard.KEY_W) && !isEnteringString) {
+                w = false;
+            }
+            if (Keyboard.isKeyDown(Keyboard.KEY_A) && !a && !isEnteringString) {
+                a = true;
+            }
+            else if (!Keyboard.isKeyDown(Keyboard.KEY_A) && !isEnteringString) {
+                a = false;
+            }
+            if (Keyboard.isKeyDown(Keyboard.KEY_S) && !sb && !isEnteringString) {
+                sb = true;
+            }
+            else if (!Keyboard.isKeyDown(Keyboard.KEY_S) && !isEnteringString) {
+                sb = false;
+            }
+            if (Keyboard.isKeyDown(Keyboard.KEY_D) && !d && !isEnteringString) {
+                d = true;
+            }
+            else if (!Keyboard.isKeyDown(Keyboard.KEY_D) && !isEnteringString) {
+                d = false;
+            }
+
+
             boolean forward = Keyboard.isKeyDown(Keyboard.KEY_W);
             boolean back = Keyboard.isKeyDown(Keyboard.KEY_S);
             boolean moveLeft = Keyboard.isKeyDown(Keyboard.KEY_A);
@@ -137,6 +241,7 @@ public class TestWalker implements TargetDelegate {
             boolean right = Keyboard.isKeyDown(Keyboard.KEY_RIGHT);
             boolean left = Keyboard.isKeyDown(Keyboard.KEY_LEFT);
             boolean space = Keyboard.isKeyDown(Keyboard.KEY_SPACE);
+
             
             //move and turn setters
             if (moveLeft && !isEnteringString) l.setVx(MOVE_BY);
@@ -146,13 +251,13 @@ public class TestWalker implements TargetDelegate {
             else if (back && !isEnteringString) l.setVz(-MOVE_BY);
             else l.setVz(0);
             if (left) {
-                l.setRotation(l.getRotation()+.003);
+                l.setRotation(l.getRotation()+.005);
             }
             if (right) {
-                l.setRotation(l.getRotation()-.003);
+                l.setRotation(l.getRotation()-.005);
             }
-            if (up && l.getViewAngle()<45*(Math.PI/180)) l.setViewAngle(l.getViewAngle()+.003);
-            if (down && l.getViewAngle()>-45*(Math.PI/180)) l.setViewAngle(l.getViewAngle()-.003);
+            if (up && l.getViewAngle()<45*(Math.PI/180)) l.setViewAngle(l.getViewAngle()+.005);
+            if (down && l.getViewAngle()>-45*(Math.PI/180)) l.setViewAngle(l.getViewAngle()-.005);
             
             //object interaction happens here
             if (space && !spacePressed) {
@@ -184,10 +289,10 @@ public class TestWalker implements TargetDelegate {
                         }
                         if (w.getSurfaceVector().getX() ==1) {
                             if (l.getZ()>w.getPosZ()) {
-                                l.setZ(w.getPosZ()+.2f);
+                                l.setZ(w.getPosZ() + .2f);
                             }
                             else {
-                                l.setZ(w.getPosZ()-.2f);
+                                l.setZ(w.getPosZ() - .2f);
                             }
                         }
                     }
@@ -235,13 +340,13 @@ public class TestWalker implements TargetDelegate {
     		glEnd();
     		
     		if (isTesting) {
-    		glColor3f(1,1,1);
-    		glBegin(GL_QUADS);
-    		glVertex3f(1,0,1);
-    		glVertex3f(-1,0,1);
-    		glVertex3f(-1,0,-1);
-    		glVertex3f(1,0,-1);
-    		glEnd();
+                glColor3f(1,1,1);
+                glBegin(GL_QUADS);
+                glVertex3f(1,0,1);
+                glVertex3f(-1,0,1);
+                glVertex3f(-1,0,-1);
+                glVertex3f(1,0,-1);
+                glEnd();
     		}
     		
     		//endscreen check
@@ -475,6 +580,12 @@ public class TestWalker implements TargetDelegate {
             glDisable(GL_TEXTURE_2D);
             //update Display
             Display.update();
+
+             if (Keyboard.isKeyDown(Keyboard.KEY_R)) {
+                if (isOver) {
+                    setup();
+                }
+            }
         }
         Display.destroy();
     }
@@ -498,19 +609,10 @@ public class TestWalker implements TargetDelegate {
     
     private void end() {
     	make2D();
-    	font.drawString(10, 400, "You won!! You found the crowbar and can now escape!", Color.white);
+    	font.drawString(10, 360, "You won!! You found the crowbar and can now escape!", Color.white);
+        font.drawString(400, 440, "Press R to restart", Color.white);
         isOver = true;
     }
-    
-    /*public void drawSquare(float width, float x,float y, float z, float r, float g, float b) {
-        glBegin(GL_QUADS);
-        glColor3d(r, g, b);
-        glVertex3d(x - (width / 2), y, z - (width / 2));
-        glVertex3d(x - (width / 2), y, z + (width / 2));
-        glVertex3d(x + (width / 2), y, z + (width / 2));
-        glVertex3d(x + (width / 2), y, z - (width / 2));
-        glEnd();
-    }*/
     
     protected static void make2D() { //make 2D
         glEnable(GL_BLEND);
@@ -711,23 +813,23 @@ public class TestWalker implements TargetDelegate {
 
         glEnable(GL_TEXTURE_2D);
         glBegin(GL_QUADS);
-        glTexCoord2f(1, 0);
-        glVertex3f(wall.getPosX(), WALL_HEIGHT, wall.getPosZ()+0.01f);
         glTexCoord2f(0, 0);
-        glVertex3f(wall.getPosX() + wall.getWidth()/10, WALL_HEIGHT, wall.getPosZ()+0.01f);
-        glTexCoord2f(0, 1);
-        glVertex3f(wall.getPosX() + wall.getWidth()/10, (float)WALL_HEIGHT*((float)8/(float)10), wall.getPosZ()+0.01f);
+        glVertex3f(wall.getPosX() + wall.getWidth()*((float)4/(float)10), (float)WALL_HEIGHT*((float)6/(float)10), wall.getPosZ()+0.01f);
+        glTexCoord2f(1, 0);
+        glVertex3f(wall.getPosX() + wall.getWidth()*((float)6/(float)10), (float)WALL_HEIGHT*((float)6/(float)10), wall.getPosZ()+0.01f);
         glTexCoord2f(1, 1);
-        glVertex3f(wall.getPosX(), (float)WALL_HEIGHT*((float)8/(float)10), wall.getPosZ()+0.01f);
+        glVertex3f(wall.getPosX() + wall.getWidth()*((float)6/(float)10), (float)WALL_HEIGHT*((float)4/(float)10), wall.getPosZ()+0.01f);
+        glTexCoord2f(0, 1);
+        glVertex3f(wall.getPosX() + wall.getWidth()*((float)4/(float)10), (float)WALL_HEIGHT*((float)4/(float)10), wall.getPosZ()+0.01f);
 
         glTexCoord2f(1, 0);
-        glVertex3f(wall.getPosX(), WALL_HEIGHT, wall.getPosZ()-0.01f);
+        glVertex3f(wall.getPosX() + wall.getWidth()*((float)4/(float)10), (float)WALL_HEIGHT*((float)6/(float)10), wall.getPosZ()-0.01f);
         glTexCoord2f(0, 0);
-        glVertex3f(wall.getPosX() + wall.getWidth()/10, WALL_HEIGHT, wall.getPosZ()-0.01f);
+        glVertex3f(wall.getPosX() + wall.getWidth()*((float)6/(float)10), (float)WALL_HEIGHT*((float)6/(float)10), wall.getPosZ()-0.01f);
         glTexCoord2f(0, 1);
-        glVertex3f(wall.getPosX() + wall.getWidth()/10, (float)WALL_HEIGHT*((float)8/(float)10), wall.getPosZ()-0.01f);
+        glVertex3f(wall.getPosX() + wall.getWidth()*((float)6/(float)10), (float)WALL_HEIGHT*((float)4/(float)10), wall.getPosZ()-0.01f);
         glTexCoord2f(1, 1);
-        glVertex3f(wall.getPosX(), (float)WALL_HEIGHT*((float)8/(float)10), wall.getPosZ()-0.01f);
+        glVertex3f(wall.getPosX() + wall.getWidth()*((float)4/(float)10), (float)WALL_HEIGHT*((float)4/(float)10), wall.getPosZ()-0.01f);
 
         glEnd();
         //glBindTexture(GL_TEXTURE_2D, 0);
@@ -742,22 +844,22 @@ public class TestWalker implements TargetDelegate {
         glEnable(GL_TEXTURE_2D);
         glBegin(GL_QUADS);
         glTexCoord2f(1, 0);
-        glVertex3f(wall.getPosX()+0.01f, WALL_HEIGHT, wall.getPosZ());
+        glVertex3f(wall.getPosX()+0.01f, (float)WALL_HEIGHT*((float)6/(float)10), wall.getPosZ() + wall.getWidth()*((float)4/(float)10));
         glTexCoord2f(0, 0);
-        glVertex3f(wall.getPosX()+0.01f, WALL_HEIGHT, wall.getPosZ() + wall.getWidth()/10);
+        glVertex3f(wall.getPosX()+0.01f, (float)WALL_HEIGHT*((float)6/(float)10), wall.getPosZ() + wall.getWidth()*((float)6/(float)10));
         glTexCoord2f(0, 1);
-        glVertex3f(wall.getPosX()+0.01f, (float)WALL_HEIGHT*((float)8/(float)10), wall.getPosZ() + wall.getWidth()/10);
+        glVertex3f(wall.getPosX()+0.01f, (float)WALL_HEIGHT*((float)4/(float)10), wall.getPosZ() + wall.getWidth()*((float)6/(float)10));
         glTexCoord2f(1, 1);
-        glVertex3f(wall.getPosX()+0.01f, (float)WALL_HEIGHT*((float)8/(float)10), wall.getPosZ());
+        glVertex3f(wall.getPosX()+0.01f, (float)WALL_HEIGHT*((float)4/(float)10), wall.getPosZ() + wall.getWidth()*((float)4/(float)10));
 
-        glTexCoord2f(1, 0);
-        glVertex3f(wall.getPosX()-0.01f, WALL_HEIGHT, wall.getPosZ());
         glTexCoord2f(0, 0);
-        glVertex3f(wall.getPosX()-0.01f, WALL_HEIGHT, wall.getPosZ() + wall.getWidth()/10);
-        glTexCoord2f(0, 1);
-        glVertex3f(wall.getPosX() - 0.01f, (float)WALL_HEIGHT*((float)8/(float)10), wall.getPosZ() + wall.getWidth()/10);
+        glVertex3f(wall.getPosX()-0.01f, (float)WALL_HEIGHT*((float)6/(float)10), wall.getPosZ() + wall.getWidth()*((float)4/(float)10));
+        glTexCoord2f(1, 0);
+        glVertex3f(wall.getPosX()-0.01f, (float)WALL_HEIGHT*((float)6/(float)10), wall.getPosZ() + wall.getWidth()*((float)6/(float)10));
         glTexCoord2f(1, 1);
-        glVertex3f(wall.getPosX()-0.01f, (float)WALL_HEIGHT*((float)8/(float)10), wall.getPosZ());
+        glVertex3f(wall.getPosX() - 0.01f, (float)WALL_HEIGHT*((float)4/(float)10), wall.getPosZ() + wall.getWidth()*((float)6/(float)10));
+        glTexCoord2f(0, 1);
+        glVertex3f(wall.getPosX() - 0.01f, (float) WALL_HEIGHT * ((float) 4/(float)10), wall.getPosZ() + wall.getWidth()*((float)4/(float)10));
 
         glEnd();
         //glBindTexture(GL_TEXTURE_2D, 0);
