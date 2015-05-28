@@ -46,7 +46,7 @@ public class PlayerObject {//Represents an object that can be interacted with by
         return wasFound;
     }
 
-    public float getSize() {
+    public float getSize() {//graphic scaling of object
 
         return size;
     }
