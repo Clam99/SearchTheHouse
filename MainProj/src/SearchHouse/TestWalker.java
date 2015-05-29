@@ -96,13 +96,13 @@ public class TestWalker implements TargetDelegate {
     	
     	//import textures as images
         try {
-            E = TextureLoader.getTexture("PNG", getClass().getResourceAsStream("res/Letter-E.png"));
-            L = TextureLoader.getTexture("PNG", getClass().getResourceAsStream("res/Letter-L.png"));
-            P = TextureLoader.getTexture("PNG", getClass().getResourceAsStream("res/Letter-P.png"));
-            H = TextureLoader.getTexture("PNG", getClass().getResourceAsStream("res/Letter-H.png"));
-            A = TextureLoader.getTexture("PNG", getClass().getResourceAsStream("res/Letter-A.png"));
-            N = TextureLoader.getTexture("PNG", getClass().getResourceAsStream("res/Letter-N.png"));
-            T = TextureLoader.getTexture("PNG", getClass().getResourceAsStream("res/Letter-T.png"));
+           E = TextureLoader.getTexture("PNG", new FileInputStream(new File("/Users/janstratmann/Letter-E.png")));
+            L = TextureLoader.getTexture("PNG", new FileInputStream(new File("/Users/janstratmann/Letter-L.png")));
+            P = TextureLoader.getTexture("PNG", new FileInputStream(new File("/Users/janstratmann/Letter-P.png")));
+            H = TextureLoader.getTexture("PNG", new FileInputStream(new File("/Users/janstratmann/Letter-H.png")));
+            A = TextureLoader.getTexture("PNG", new FileInputStream(new File("/Users/janstratmann/Letter-A.png")));
+            N = TextureLoader.getTexture("PNG", new FileInputStream(new File("/Users/janstratmann/Letter-N.png")));
+            T = TextureLoader.getTexture("PNG", new FileInputStream(new File("/Users/janstratmann/Letter-T.png")));
         } catch (IOException e1) {
             e1.printStackTrace(); 
         }
